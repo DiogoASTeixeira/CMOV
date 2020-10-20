@@ -29,8 +29,8 @@ module.exports = (sequelize, type) => {
             type: type.FLOAT,
             allowNull: false
         },
-        stored_discount: {
-            type: type.FLOAT,
+        hundred_multiples: {
+            type: type.INTEGER,
             allowNull: false
         },
         nif: {

@@ -94,7 +94,131 @@ async function getTransaction(info, id){
 }
 
 //checkout
-async function checkout(body) {
+async function checkout(req) {
+    // Create Transaction
+    let transaction = {
+        id: create_UUID(),
+        UserId: req.body.UserId
+    };
+
+    transaction.voucher = req.body.voucher;
+
+    let total_spent = 0;
+    req.body.products.forEach(product => {
+        total_spent += parseFloat(product.price);
+    });
+
+    if (transaction.voucher != null) {
+        transaction.total_value = total_spent - total_spent * 0.05;
+        transaction.discount = 0.05 * total_spent;
+    } else {
+        transaction.total_value = total_spent;
+        transaction.discount = 0;
+    }
+
+    let usedProducts = new Map();
+    let coffee_number = 0;
+
+    Transaction.create(transaction)
+        .then(createdTransaction => {
+            req.body.products.forEach(product => {
+                let count;
+                if (product.name.equals("coffee")){
+                    coffee_number++;
+                }
+                if (!usedProducts.has(product.id)) {
+                    count = 1;
+                }
+                else {
+                    count = usedProducts.get(product.id) + 1;
+                    usedProducts.set(product.id, count);
+                }
+            });
+            usedProducts.forEach(function(count, id) {
+            let trans_prod = {
+                id: create_UUID(),
+                ProductId: id,
+                TransactionId: createdTransaction.id,
+                count: count
+            };
+            TransactionProduct.create(trans_prod);
+        });
+            // Update voucher if used
+            if (req.body.voucher != null) {
+                Voucher.update({
+                    used: true
+                }, {
+                    where: {
+                        id: req.body.voucher
+                    },
+                    returning: true, // needed for affectedRows to be populated
+                });
+            }
+            User.findOne({
+                    where: {
+                        id: req.body.UserId
+                    }
+                })
+                .then(user => {
+                    let query = "UPDATE Users SET total_spent = total_spent + :total, total_coffees: total_coffees + :coffee_number WHERE id = :id";
+                    sequelize.query(query, {
+                            replacements: {
+                                total: createdTransaction.total_value,
+                                id: user.id,
+                                coffee_number: coffee_number
+                            }
+                        })
+                        .then(([results, metadata]) => {
+                            let user = User.findOne({
+                                where: {
+                                    id: req.body.UserId
+                                }
+                            });
+
+                            //give voucher if more than 3 coffees
+                            /*
+                            if(user.total_coffees >= 3) {
+                                let voucher = {
+                                    id: create_UUID(),
+                                    used: false,
+                                    UserId: req.body.UserId,
+                                    TransactionId: null
+                                }
+
+                                Voucher.create(voucher);
+
+                                let query = "UPDATE Users SET total_coffees: 0 WHERE id = :id";
+                                sequelize.query(query, {
+                                    replacements: {
+                                        id: user.id,
+                                    }
+                                })
+                            }*/
+
+                            //give voucher if another 100 multiple has been reached
+                            if((user.total_spent / 100) > (user.hundred_multiples + 1)) {
+                                let voucher = {
+                                    id: create_UUID(),
+                                    used: false,
+                                    UserId: req.body.UserId,
+                                    TransactionId: null
+                                }
+
+                                Voucher.create(voucher);
+
+                                let query = "UPDATE Users SET hundred_multiples: hundred_multiples + 1 WHERE id = :id";
+                                sequelize.query(query, {
+                                    replacements: {
+                                        id: user.id,
+                                    }
+                                })
+                            }
+                        })
+                })
+        })
+        .catch(function(err) {
+            console.log(err);
+        });
     return;
 }
 
