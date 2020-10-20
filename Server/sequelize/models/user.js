@@ -37,5 +37,9 @@ module.exports = (sequelize, type) => {
             type: type.STRING,
             allowNull: false
         },
+        total_coffees: {
+            type: type.INTEGER,
+            allowNull: false
+        }
     })
 }
