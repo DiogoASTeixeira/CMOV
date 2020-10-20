@@ -4,6 +4,9 @@
 *.ap_
 *.aab
 
+# Node Modules
+./Server/node_modules/
+
 # Files for the ART/Dalvik VM
 *.dex
 
