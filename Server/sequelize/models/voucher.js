@@ -4,7 +4,11 @@ module.exports = (sequelize, type) => {
             type: type.UUID,
             primaryKey: true
         },
-        used:{
+        used: {
+            type: type.BOOLEAN,
+            defaultValue: false,
+        },
+        coffee: {
             type: type.BOOLEAN,
             defaultValue: false,
         }
