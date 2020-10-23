@@ -3,7 +3,7 @@ package com.feup.acme_cafe.ui.login;
 import android.app.Activity;
 
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 
@@ -26,15 +26,15 @@ import com.feup.acme_cafe.R;
 import com.feup.acme_cafe.ui.login.LoginViewModel;
 import com.feup.acme_cafe.ui.login.LoginViewModelFactory;
 
-public class LoginActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
+        setContentView(R.layout.activity_register);
+        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
         final EditText usernameEditText = findViewById(R.id.username);

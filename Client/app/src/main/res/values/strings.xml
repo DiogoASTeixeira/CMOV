@@ -5,8 +5,15 @@
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="Welcome_message">Welcome to ACME</string>
+    <string name="username_login">Insert your ACME username</string>
+    <string name="password_login">Insert you ACME password</string>
+    <string name="register_login">Don\'t have an account? Click here!</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="Sign_In_login">Sign In</string>
+    <string name="register_register">Register</string>
+    <string name="login_register">Already have an account? Click here!</string>
 </resources>
