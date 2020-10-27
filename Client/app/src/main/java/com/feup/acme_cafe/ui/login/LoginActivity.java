@@ -89,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
 
         queue.add(jsonobj);
 
+        //TODO Create next page (intent)
 
         //Pass params to next page
         //intent.putExtra(EXTRA_MESSAGE, username);

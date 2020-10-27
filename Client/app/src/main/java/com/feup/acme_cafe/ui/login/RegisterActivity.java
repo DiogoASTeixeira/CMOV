@@ -106,6 +106,8 @@ public class RegisterActivity extends AppCompatActivity {
         ) {};
 
         queue.add(jsonobj);
+
+        login();
     }
 
     private void login() {
