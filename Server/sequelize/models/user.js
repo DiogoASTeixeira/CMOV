@@ -4,6 +4,11 @@ module.exports = (sequelize, type) => {
             type: type.UUID,
             primaryKey: true
         },
+        email: {
+            type: type.STRING,
+            allowNull: false,
+            unique: true
+        },
         username: {
             type: type.STRING,
             allowNull: false,
@@ -27,11 +32,13 @@ module.exports = (sequelize, type) => {
         },
         total_spent: {
             type: type.FLOAT,
-            allowNull: false
+            allowNull: false,
+            defaultValue: 0
         },
         hundred_multiples: {
             type: type.INTEGER,
-            allowNull: false
+            allowNull: false,
+            defaultValue: 0
         },
         nif: {
             type: type.STRING,
@@ -39,7 +46,8 @@ module.exports = (sequelize, type) => {
         },
         total_coffees: {
             type: type.INTEGER,
-            allowNull: false
+            allowNull: false,
+            defaultValue: 0
         }
     })
 }

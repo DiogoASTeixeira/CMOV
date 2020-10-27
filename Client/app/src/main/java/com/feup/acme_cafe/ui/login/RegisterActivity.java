@@ -1,126 +1,123 @@
 package com.feup.acme_cafe.ui.login;
 
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.feup.acme_cafe.R;
+import com.feup.acme_cafe.data.model.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private LoginViewModel loginViewModel;
+    public static final String EXTRA_MESSAGE = "com.feup.acme_cafe_app.USERNAME";
+    private EditText usernameEditText;
+    private EditText passwordEditText;
+    private EditText nameEditText;
+    private EditText nifEditText;
+    private EditText cardnumberEditText;
+    private EditText cardcvsEditText;
+    private EditText emailEditText;
+    private TextView loginText;
+    private Button registerButton;
+
+    private String urlLogin = "http://192.168.1.82:3000/user/register";
+    private RequestQueue queue;
+    private Intent login_intent;
+    AlertDialog alertDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
-                .get(LoginViewModel.class);
 
-        final EditText usernameEditText = findViewById(R.id.username);
-        final EditText passwordEditText = findViewById(R.id.password);
-        final Button loginButton = findViewById(R.id.login);
-        final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+        registerButton = findViewById(R.id.register);
+        usernameEditText = findViewById(R.id.username);
+        passwordEditText = findViewById(R.id.password);
+        nameEditText = findViewById(R.id.name);
+        cardnumberEditText = findViewById(R.id.card_number);
+        cardcvsEditText = findViewById(R.id.card_cvs);
+        emailEditText = findViewById(R.id.email);
+        loginText = findViewById(R.id.login_text);
+        nifEditText = findViewById(R.id.nif);
+        queue = Volley.newRequestQueue(this);
+        login_intent = new Intent( this, LoginActivity.class);
 
-        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
-            @Override
-            public void onChanged(@Nullable LoginFormState loginFormState) {
-                if (loginFormState == null) {
-                    return;
-                }
-                loginButton.setEnabled(loginFormState.isDataValid());
-                if (loginFormState.getUsernameError() != null) {
-                    usernameEditText.setError(getString(loginFormState.getUsernameError()));
-                }
-                if (loginFormState.getPasswordError() != null) {
-                    passwordEditText.setError(getString(loginFormState.getPasswordError()));
-                }
-            }
-        });
-
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
-            @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
-                if (loginResult == null) {
-                    return;
-                }
-                loadingProgressBar.setVisibility(View.GONE);
-                if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
-                }
-                if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
-                }
-                setResult(Activity.RESULT_OK);
-
-                //Complete and destroy login activity once successful
-                finish();
-            }
-        });
-
-        TextWatcher afterTextChangedListener = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // ignore
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // ignore
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-            }
-        };
-        usernameEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
-                }
-                return false;
-            }
-        });
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-            }
-        });
+        loginText.setOnClickListener((v)->login());
+        registerButton.setOnClickListener((v)->register());
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.Welcome_message) + model.getDisplayName();
-        // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+    private void register() {
+        final String username = usernameEditText.getText().toString();
+        final String password = passwordEditText.getText().toString();
+        final String email = emailEditText.getText().toString();
+        final String name = nameEditText.getText().toString();
+        final String card_number = cardnumberEditText.getText().toString();
+        final String card_cvs = cardcvsEditText.getText().toString();
+        final String nif = nifEditText.getText().toString();
+        UUID id = UUID.randomUUID();
+
+        HashMap info= new HashMap();
+        info.put("id", id);
+        info.put("email", email);
+        info.put("username", username);
+        info.put("name", name);
+        info.put("password", password);
+        info.put("card_number", card_number);
+        info.put("card_cvs", card_cvs);
+        info.put("nif", nif);
+
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, urlLogin, new JSONObject(info),
+                response -> {
+                    try {
+                        Object obj = response.get("user");
+                        if (obj.toString().equals("null")){
+                            setAndShowAlertDialog("Register Error", "Something went wrong with the register");
+                            Log.d("register", "WRONG REGIST");
+                        }
+                        else {
+                            JSONObject jsonObj = response.getJSONObject("user");
+                            User user = new User(jsonObj);
+                            //getTransactions(user);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    setAndShowAlertDialog("Server Error", "Unexpected Server Error");
+                    Log.d("register error", error.toString());
+                }
+        ) {};
+
+        queue.add(jsonobj);
     }
 
-    private void showLoginFailed(@StringRes Integer errorString) {
-        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    private void login() {
+        startActivity(login_intent);
     }
+
+    private void setAndShowAlertDialog(String title, String message){
+        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        dialog.setMessage(message);
+        dialog.setTitle(title);
+        alertDialog=dialog.create();
+        alertDialog.show();
+    }
+
 }

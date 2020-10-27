@@ -66,8 +66,8 @@ async function registerUser(info) {
 }
 
 //login
-async function login(username, password) {
-    return User.findOne({ where: {username: username, password: password}}).catch(function(err) {
+async function login(email, password) {
+    return User.findOne({ where: {email: email, password: password}}).catch(function(err) {
         console.log(err);
     });
 }

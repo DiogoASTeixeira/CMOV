@@ -14,7 +14,7 @@ router.post('/register', async function(req, res, next) {
 })
 
 router.post('/login', async function(req, res, next) {
-  const user = await productRepo.login(req.body.username, req.body.password);
+  const user = await productRepo.login(req.body.email, req.body.password);
   res.json({user});
 });
 
