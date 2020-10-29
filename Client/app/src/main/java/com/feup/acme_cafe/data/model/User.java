@@ -104,6 +104,7 @@ public class User implements Serializable {
     }
 
     public void setTransactions(JSONArray response) {
+        System.out.println(response);
         for (int i = 0; i < response.length(); i++) {
             try {
                 JSONObject jsonobject = response.getJSONObject(i);

@@ -20,17 +20,17 @@ router.post('/login', async function(req, res, next) {
 
 router.post('/voucher', async function(req, res, next) {
   const voucher = await productRepo.getUnusedVouchers(req.body);
-  res.json({voucher});
+  res.json(voucher);
 });
 
 router.post('/transaction', async function(req, res, next) {
   const transactions = await productRepo.getTransactions(req.body);
-  res.json({transactions});
+  res.json(transactions);
 });
 
 router.post('/transaction/:id', async function(req, res, next) {
   const transaction = await productRepo.getTransaction(req.body, req.params.id);
-  res.json({transaction});
+  res.json(transaction);
 });
 
 router.post('/checkout', async function(req, res, next) {

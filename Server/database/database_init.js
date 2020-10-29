@@ -35,12 +35,13 @@ sequelize
   .then(() => {
     User.bulkCreate([
       {id: "b0e76929-9762-45b7-be1f-2f37d2edf33c", email: "fabio@gmail.com", username: "Fabio", name: "Fábio Azevedo", password:"famas", card_number:"123123", card_cvs: "101", total_spent: 0, hundred_multiples: 0, nif: "134", total_coffees: 0},
-      {id: "32bf576f-1d83-4141-9009-8d4c6435d10e", email: "diogo@gmail.com", username: "Diogo", name: "Diogo Teixeira", password:"teixas", card_number:"123124", card_cvs: "102", total_spent: 220, hundred_multiples: 2, nif: "456", total_coffees: 0},
+      {id: "32bf576f-1d83-4141-9009-8d4c6435d10e", email: "diogo@gmail.com", username: "Diogo", name: "Diogo Teixeira", password:"teixas", card_number:"123124", card_cvs: "102", total_spent: 250, hundred_multiples: 2, nif: "456", total_coffees: 0},
     ])
   })
   .then(() => {
     Transaction.bulkCreate([
       {id: "82d7e51b-9b63-4570-bf32-da837ec09981", voucher: "b1a3k3v1-cte1-4ab3-b1ce-67cf4d3935ac", total_value: 220, discount: 11, UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e"},
+      {id: "82d7e51b-9b63-4570-bf32-da837ec09982", total_value: 30, discount: 0, UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e"}
     ])
   })
     .then(() => {
@@ -63,6 +64,7 @@ sequelize
         TransactionProduct.bulkCreate([
           {ProductId: "d93402fb-8af4-40e0-8c0d-7a05485405f3", TransactionId:"82d7e51b-9b63-4570-bf32-da837ec09981", count: 1},
           {ProductId: "6b6e76f5-85cf-4b65-9697-979524ae0c19", TransactionId:"82d7e51b-9b63-4570-bf32-da837ec09981", count: 4},
+          {ProductId: "c19817fe-2b3b-4c48-877e-7ea98f081e74", TransactionId:"82d7e51b-9b63-4570-bf32-da837ec09982", count: 1}
         ])
         })
   .catch(error => {

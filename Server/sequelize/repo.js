@@ -74,14 +74,14 @@ async function login(email, password) {
 
 //get user unused vouchers
 async function getUnusedVouchers(info){
-    return Voucher.findAll({ where: {UserId: info.UserId, used: false}}).catch(function(err) {
+    return Voucher.findAll({ where: {UserId: info[0].UserId, used: false}}).catch(function(err) {
         console.log(err);
     });
 }
 
 //get all transactions from an user
 async function getTransactions(info){
-    return Transaction.findAll({ where: {UserId: info.UserId}}).catch(function(err) {
+    return Transaction.findAll({ where: {UserId: info[0].UserId}}).catch(function(err) {
         console.log(err);
     });
 }
