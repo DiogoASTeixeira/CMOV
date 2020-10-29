@@ -34,8 +34,8 @@ sequelize
 .sync({force:true})
   .then(() => {
     User.bulkCreate([
-      {id: "b0e76929-9762-45b7-be1f-2f37d2edf33c", email: "fabio@gmail.com", username: "Fabio", name: "Fábio Azevedo", password:"famas", card_number:"123123", card_cvs: "101", total_spent: 0, hundred_multiples: 0, nif: "134", total_coffees: 0},
-      {id: "32bf576f-1d83-4141-9009-8d4c6435d10e", email: "diogo@gmail.com", username: "Diogo", name: "Diogo Teixeira", password:"teixas", card_number:"123124", card_cvs: "102", total_spent: 250, hundred_multiples: 2, nif: "456", total_coffees: 0},
+      {id: "b0e76929-9762-45b7-be1f-2f37d2edf33c", email: "fabio@gmail.com", username: "Fabio", name: "Fábio Azevedo", password:"4sPYOZOhJo3uODnnDZhuyh0hLWJ1iL57XWpj5TRESNY=", card_number:"123123", card_cvs: "101", total_spent: 0, hundred_multiples: 0, nif: "134", total_coffees: 0},
+      {id: "32bf576f-1d83-4141-9009-8d4c6435d10e", email: "diogo@gmail.com", username: "Diogo", name: "Diogo Teixeira", password:"jxRlcHQCMoGKrhyVysaZIpIlTaslft+K8iLxM227tbY=", card_number:"123124", card_cvs: "102", total_spent: 250, hundred_multiples: 2, nif: "456", total_coffees: 0},
     ])
   })
   .then(() => {

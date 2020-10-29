@@ -87,8 +87,8 @@ async function getTransactions(info){
 }
 
 //get a transaction from an user
-async function getTransaction(info, id){
-    return Transaction.findOne({ where: {UserId: info.UserId, id: id}}).catch(function(err) {
+async function getTransaction(id){
+    return Transaction.findOne({ where: {id: id}}).catch(function(err) {
         console.log(err);
     });
 }

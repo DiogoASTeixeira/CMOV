@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
         android:layout_margin="10dp"
-        android:text="Menu"
+        android:text="Transaction List"
         android:textColor="#F44336"
         android:textSize="30sp" />
 

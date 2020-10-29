@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,13 +40,14 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private TextView registerText;
     private Button loginButton;
-    private String urlLogin = "http://192.168.1.77:3000/user/login";
-    private String urlVoucher = "http://192.168.1.77:3000/user/voucher";
-    private String urlTransaction = "http://192.168.1.77:3000/user/transaction";
+    private String urlLogin = "";
+    private String urlVoucher = "";
+    private String urlTransaction = "";
     private RequestQueue queue;
     private Intent register_intent;
     private Intent main_activity_intent;
     AlertDialog alertDialog;
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -59,8 +62,10 @@ public class LoginActivity extends AppCompatActivity {
         queue = Volley.newRequestQueue(this);
         register_intent = new Intent( this, RegisterActivity.class);
         main_activity_intent = new Intent(this, MainActivity.class);
+        urlLogin = "http://" + Util.ip_address + ":3000/user/login";
+        urlVoucher = "http://" + Util.ip_address + ":3000/user/voucher";
+        urlTransaction = "http://" + Util.ip_address + ":3000/user/transaction";
 
-        /*
         try {
             User user = Util.loadUser(getApplicationContext());
             if (user != null)
@@ -69,10 +74,35 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }*/
+        }
 
         loginButton.setOnClickListener((v)->loginUser());
         registerText.setOnClickListener((v)->registerUser());
+    }
+
+    public void getProducts(User user) {
+        String urlProducts = "http://" + Util.ip_address + ":3000/product";
+        JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.GET, urlProducts, new JSONArray(),
+                response -> {
+                    Log.d("products response", response.toString());
+                    try {
+                        user.setProducts(response);
+                        try {
+                            Util.saveUser(user, getApplicationContext());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        openStore(user);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    setAndShowAlertDialog("Server Error", "Unexpected Server Error");
+                    Log.d("products error", error.toString());
+                }
+        ) {};
+        queue.add(jsonobj);
     }
 
     public void getTransactions(User user) throws JSONException {
@@ -110,12 +140,7 @@ public class LoginActivity extends AppCompatActivity {
                 response -> {
                     Log.d("vouchers response", response.toString());
                     user.setVouchers(response);
-                    try {
-                        Util.saveUser(user, getApplicationContext());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    openStore(user);
+                    getProducts(user);
                 },
                 error -> {
                     setAndShowAlertDialog("Server Error", "Unexpected Server Error");
@@ -143,13 +168,11 @@ public class LoginActivity extends AppCompatActivity {
         final String password = passwordEditText.getText().toString();
         final User[] user = new User[1];
 
-        final String encrypted_password = PasswordUtil.generateEncryptedPassword("dragon1998");
+        final String encrypted_password = PasswordUtil.generateEncryptedPassword(password);
 
         HashMap info= new HashMap();
         info.put("email", email);
         info.put("password", encrypted_password);
-
-        System.out.println(encrypted_password);
 
         if(!email.equals("") && !password.equals("")) {
             JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, urlLogin, new JSONObject(info),

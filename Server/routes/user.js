@@ -29,7 +29,7 @@ router.post('/transaction', async function(req, res, next) {
 });
 
 router.post('/transaction/:id', async function(req, res, next) {
-  const transaction = await productRepo.getTransaction(req.body, req.params.id);
+  const transaction = await productRepo.getTransaction(req.params.id);
   res.json(transaction);
 });
 

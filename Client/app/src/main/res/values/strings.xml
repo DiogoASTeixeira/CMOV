@@ -1,19 +1,31 @@
 <resources>
-    <string name="app_name">ACME_Cafe</string>
-    <!-- Strings related to login -->
+    <string name="app_name">ACME Supermarket</string>
+    <string name="tv_name">Name:</string>
+    <string name="tv_address">Address:</string>
+    <string name="tv_type">Type:</string>
+    <string name="rb_take">Take-Out</string>
+    <string name="rb_sit">Sit-Down</string>
+    <string name="rb_delivery">Delivery</string>
+    <string name="tv_notes">Notes:</string>
+    <string name="bt_save">Save</string>
+    <string name="check_cart">Check Cart</string>
+    <string name="mn_it_add">Cart</string>
+    <string name="lv_empty_msg">Activate the menu item to add a restaurant!</string>
+    <string name="ed_name_hint">Name</string>
+    <string name="ed_address_hint">Address</string>
+    <string name="ed_notes_hint">Notes</string>
+    <string name="title_activity_login">Sign in</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
+    <string name="register">Register</string>
+    <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="Welcome_message">Welcome to ACME</string>
-    <string name="username_login">Insert your ACME username</string>
-    <string name="password_login">Insert you ACME password</string>
-    <string name="register_login">Don\'t have an account? Click here!</string>
-    <string name="title_activity_register">RegisterActivity</string>
-    <string name="Sign_In_login">Sign In</string>
-    <string name="register_register">Register</string>
-    <string name="login_register">Already have an account? Click here!</string>
+    <string name="title_activity_qr_code">QrCodeActivity</string>
+    <string name="tv_message_template">Value(%d b): \"%s\"</string>
+    <string name="check_profile">Profile Page</string>
+    <string name="ip_address">10.227.149.133</string>
 </resources>

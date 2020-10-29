@@ -4,10 +4,11 @@ import java.io.Serializable;
 
 public class Product implements Serializable {
 
-    private Integer count;
+    private String imageUrl;
     private String id;
     private String name;
     private float price;
+    private Integer count;
 
     public String getId() {
         return id;
@@ -42,6 +43,12 @@ public class Product implements Serializable {
         price = Float.parseFloat(ss[2]);
     }
 
+    public Product(String name, Float price, String imageUrl){
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
     public Product(String name, Float price, Integer count){
         this.name = name;
         this.price = price;
@@ -49,11 +56,11 @@ public class Product implements Serializable {
     }
 
 
-    public Integer getCount() {
-        return count;
+    public String getUrl() {
+        return this.imageUrl;
     }
 
-    public void setCount(Integer count) {
-        this.count = count;
+    public void setUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

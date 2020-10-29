@@ -21,7 +21,9 @@ public class User implements Serializable {
     private List<String> vouchers;
     private String username;
     private String name;
+    private String email;
     private Transaction basket;
+    private List<Product> products;
 
     public Transaction getBasket() {
         return basket;
@@ -35,6 +37,7 @@ public class User implements Serializable {
         transactions = new ArrayList();
         vouchers = new ArrayList();
         basket = new Transaction();
+        products = new ArrayList<Product>();
         try {
             this.id = response.getString("id");
             this.username = response.getString("username");
@@ -49,8 +52,29 @@ public class User implements Serializable {
             this.hundred_multiples = Float.parseFloat(hundred_multiples);
             String total_spent = response.getString("total_spent");
             this.total_spent = Float.parseFloat(total_spent);
+            this.email = response.getString("email");
+
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    public List<Product> getProducts() {
+        return this.products;
+    }
+
+    public void setProducts(JSONArray response) {
+        for (int i = 0; i < response.length(); i++) {
+            try {
+                JSONObject jsonobject = response.getJSONObject(i);
+                String name = jsonobject.getString("name");
+                String price = jsonobject.getString("value");
+                String url = jsonobject.getString("icon_path");
+                Product t = new Product(name, Float.parseFloat(price), url);
+                products.add(t);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -94,7 +118,6 @@ public class User implements Serializable {
         return vouchers;
     }
 
-
     public String getId() {
         return id;
     }
@@ -129,6 +152,10 @@ public class User implements Serializable {
                 e.printStackTrace();
             }
         }
+    }
+
+    public String getEmail(){
+        return this.email;
     }
 
     public void flushTransaction()

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.security.KeyPairGeneratorSpec;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,12 +22,27 @@ import com.feup.acme_cafe.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigInteger;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.cert.Certificate;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.AlgorithmParameterSpec;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.UUID;
+
+import javax.security.auth.x500.X500Principal;
 
 public class RegisterActivity extends AppCompatActivity {
 
     public static final String EXTRA_MESSAGE = "com.feup.acme_cafe_app.USERNAME";
+    private static final String TAG = "";
     private EditText usernameEditText;
     private EditText passwordEditText;
     private EditText nameEditText;
@@ -37,7 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
     private TextView loginText;
     private Button registerButton;
 
-    private String urlLogin = "http://192.168.1.77:3000/user/register";
+    private String urlLogin = "";
     private RequestQueue queue;
     private Intent login_intent;
     AlertDialog alertDialog;
@@ -59,6 +75,7 @@ public class RegisterActivity extends AppCompatActivity {
         nifEditText = findViewById(R.id.nif);
         queue = Volley.newRequestQueue(this);
         login_intent = new Intent( this, LoginActivity.class);
+        urlLogin = "http://" + Util.ip_address + ":3000/user/register";
 
         loginText.setOnClickListener((v)->login());
         registerButton.setOnClickListener((v)->register());
@@ -74,6 +91,17 @@ public class RegisterActivity extends AppCompatActivity {
         final String card_cvs = cardcvsEditText.getText().toString();
         final String nif = nifEditText.getText().toString();
         UUID id = UUID.randomUUID();
+
+        /*try {
+            KeyStore ks = KeyStore.getInstance(Constants.ANDROID_KEYSTORE);
+            ks.load(null);
+            KeyStore.Entry entry = ks.getEntry(Constants.keyname, null);
+            PublicKey pub = ((KeyStore.PrivateKeyEntry)entry).getCertificate().getPublicKey();
+            Certificate certificate = ((KeyStore.PrivateKeyEntry)entry).getCertificate();
+        }
+        catch (Exception ex) {
+            Log.d(TAG, ex.getMessage());
+        }*/
 
         final String encrypt_password = PasswordUtil.generateEncryptedPassword(password);
 

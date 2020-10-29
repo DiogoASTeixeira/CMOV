@@ -25,17 +25,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class Util {
-    static final int KEY_SIZE = 512;
-    static final String ANDROID_KEYSTORE = "AndroidKeyStore";
-    static final String KEY_ALGO = "RSA";
-    static final String SIGN_ALGO = "SHA256WithRSA";
-    static String keyname = "myIdKey";
+    static String ip_address = "192.168.1.77";
 
     static class ProductAdapter extends ArrayAdapter<Product> {
         private int layoutResource;
@@ -68,7 +61,7 @@ public class Util {
             Product p = getItem(position);
 
             if (p != null) {
-                TextView title = line.findViewById(R.id.title);
+                TextView title = line.findViewById(R.id.prod_name);
                 //TextView price = line.findViewById(R.id.total);
 
                 if (title != null) {
