@@ -46,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     private Intent main_activity_intent;
     AlertDialog alertDialog;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +60,8 @@ public class LoginActivity extends AppCompatActivity {
         register_intent = new Intent( this, RegisterActivity.class);
         main_activity_intent = new Intent(this, MainActivity.class);
 
-        /*try {
+        /*
+        try {
             User user = Util.loadUser(getApplicationContext());
             if (user != null)
                 openStore(user);
