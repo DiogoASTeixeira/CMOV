@@ -1,4 +1,4 @@
-package com.feup.acme_cafe.ui.login;
+package com.feup.acme_cafe.ui.client;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -30,7 +30,6 @@ import java.util.Map;
 public class DetailsTransaction extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     Util.ProductAdapter adapter;
-    private RequestQueue queue;
     Float transactionTotal = 0f;
     ArrayList<Product> products;
     AlertDialog alertDialog;
@@ -44,15 +43,13 @@ public class DetailsTransaction extends AppCompatActivity implements AdapterView
         String id = getIntent().getStringExtra("TransactionId");
 
         ListView listp = findViewById(R.id.productsDetails);
-        products = new ArrayList();
-        queue = Volley.newRequestQueue(this);
+        products = new ArrayList<>();
+        RequestQueue queue = Volley.newRequestQueue(this);
 
-        Map info= new HashMap();
+        Map<String, String> info= new HashMap<>();
         info.put("TransactionId", id);
-        List list = new ArrayList();
+        List<JSONObject> list = new ArrayList<>();
         list.add(new JSONObject(info));
-
-        System.out.println(id);
 
         String url = "http:/"+ Util.ip_address +":3000/product/transaction"; //IP Address
         JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.POST, url, new JSONArray(list),
@@ -62,12 +59,13 @@ public class DetailsTransaction extends AppCompatActivity implements AdapterView
                         try {
 
                             JSONObject jsonobject = response.getJSONObject(i);
+                            String product_id = jsonobject.getString("id");
                             String name = jsonobject.getString("name");
                             Float price = Float.parseFloat(jsonobject.getString("value"));
                             Integer count = Integer.parseInt(jsonobject.getString("count"));
                             for (int j=0;j<count;j++)
                             {
-                                products.add(new Product(name, price, url));
+                                products.add(new Product(product_id, name, price, url));
                                 transactionTotal += price;
                             }
                         } catch (JSONException e) {
@@ -80,7 +78,7 @@ public class DetailsTransaction extends AppCompatActivity implements AdapterView
                     listp.setAdapter(adapter);
                 },
                 error -> {
-                    setAndShowAlertDialog("Server Error", "Unexpected Server Error");
+                    setAndShowAlertDialog();
                     Log.d("transactions error", error.toString());
 
                 }
@@ -97,10 +95,10 @@ public class DetailsTransaction extends AppCompatActivity implements AdapterView
 
     }
 
-    private void setAndShowAlertDialog(String title, String message){
+    private void setAndShowAlertDialog(){
         AlertDialog.Builder dialog=new AlertDialog.Builder(this);
-        dialog.setMessage(message);
-        dialog.setTitle(title);
+        dialog.setMessage("Unexpected Server Error");
+        dialog.setTitle("Server Error");
         alertDialog=dialog.create();
         alertDialog.show();
     }

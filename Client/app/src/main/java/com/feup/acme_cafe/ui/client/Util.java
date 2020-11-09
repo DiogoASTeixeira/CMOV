@@ -1,4 +1,4 @@
-package com.feup.acme_cafe.ui.login;
+package com.feup.acme_cafe.ui.client;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -28,11 +28,11 @@ import java.io.ObjectOutputStream;
 import java.util.List;
 
 public class Util {
-    static String ip_address = "192.168.1.77";
+    static final String ip_address = "192.168.1.77";
 
     static class ProductAdapter extends ArrayAdapter<Product> {
-        private int layoutResource;
-        private Context mContext;
+        private final int layoutResource;
+        private final Context mContext;
         private List<Product> productList;
 
         ProductAdapter(@NonNull Context context, int resource, @NonNull List<Product> objects) {
@@ -62,18 +62,21 @@ public class Util {
 
             if (p != null) {
                 TextView title = line.findViewById(R.id.prod_name);
-                //TextView price = line.findViewById(R.id.total);
+                TextView amount = line.findViewById(R.id.amount);
+                TextView prod_price = line.findViewById(R.id.prod_price);
 
                 if (title != null) {
                     title.setText(p.getName());
                 }
 
-                /*if (price != null) {
-                    price.setText(p.getPrice() + "€");
-                }*/
+                if(amount != null) {
+                    amount.setText(String.valueOf(p.getCount()));
+                }
 
+                if(prod_price != null) {
+                    prod_price.setText(String.valueOf(p.getCount()*p.getPrice()));
+                }
             }
-
             return line;
         }
     }
@@ -120,8 +123,7 @@ public class Util {
         Log.d("dateaux",dateaux[1]);
         horaf=dateaux[1].substring(0,8);
 
-        String[] returndate = new String[]{dataf, horaf};
-        return returndate;
+        return new String[]{dataf, horaf};
     }
 
     public static String byteArrayToHex(byte[] ba) {
@@ -135,15 +137,13 @@ public class Util {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] b = baos.toByteArray();
-        String temp = Base64.encodeToString(b, Base64.DEFAULT);
-        return temp;
+        return Base64.encodeToString(b, Base64.DEFAULT);
     }
 
     public static Bitmap StringToBitMap(String encodedString) {
         try {
             byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
+            return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
         } catch (Exception e) {
             e.getMessage();
             return null;
@@ -160,7 +160,7 @@ public class Util {
 
     public static User loadUser(Context context) throws IOException, ClassNotFoundException {
         Log.d("load user", "entering");
-        FileInputStream fis = null;
+        FileInputStream fis;
         try {
             fis = context.openFileInput("user_data");
         }
@@ -176,9 +176,8 @@ public class Util {
         return obtainedUser;
     }
 
-    public static Boolean deletefile(Context context) throws IOException, ClassNotFoundException {
-        Boolean deleted;
+    public static void deletefile(Context context) {
+        boolean deleted;
         deleted=context.deleteFile("user_data");
-        return deleted;
     }
 }

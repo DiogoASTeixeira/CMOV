@@ -224,7 +224,7 @@
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:orientation="vertical"
-    tools:context=".Activities.NewTransaction">
+    tools:context=".ui.client.NewTransactionActivity">
 
     <TableRow
         android:id="@+id/addremove"
@@ -233,29 +233,7 @@
         app:layout_constraintBottom_toTopOf="@id/productsNew"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <Button
-            android:id="@+id/scan"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/colorPrimary"
-            android:text="Add Product"
-            android:textColor="#FFFFFF" />
-
-        <Button
-            android:id="@+id/removeproduct"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/colorPrimary"
-            android:text="Remove a Product"
-            android:textColor="#FFFFFF" />
-    </TableRow>
+        app:layout_constraintTop_toTopOf="parent"/>
 
 
     <ListView
@@ -282,24 +260,7 @@
         app:layout_constraintBottom_toTopOf="@id/voucherow"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/totalrow">
-
-        <SeekBar
-            android:id="@+id/discountSeekBar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/selectedDiscountText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:text="No Discount Selected" />
-
-
-    </TableRow>
+        app:layout_constraintTop_toBottomOf="@id/totalrow"/>
 
     <TableRow
         android:id="@+id/voucherow"

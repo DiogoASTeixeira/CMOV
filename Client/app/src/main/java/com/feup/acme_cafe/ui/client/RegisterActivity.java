@@ -1,10 +1,9 @@
-package com.feup.acme_cafe.ui.login;
+package com.feup.acme_cafe.ui.client;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.security.KeyPairGeneratorSpec;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,22 +21,9 @@ import com.feup.acme_cafe.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.math.BigInteger;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.KeyStore;
-import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.cert.Certificate;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import java.security.spec.AlgorithmParameterSpec;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.UUID;
-
-import javax.security.auth.x500.X500Principal;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -50,13 +36,15 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText cardnumberEditText;
     private EditText cardcvsEditText;
     private EditText emailEditText;
-    private TextView loginText;
-    private Button registerButton;
 
     private String urlLogin = "";
     private RequestQueue queue;
     private Intent login_intent;
     AlertDialog alertDialog;
+
+    boolean hasKey;
+    TextView tvKey, tvNoKey;
+    PublicKey pub;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -64,18 +52,30 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        registerButton = findViewById(R.id.register);
+        Button registerButton = findViewById(R.id.register);
         usernameEditText = findViewById(R.id.username);
         passwordEditText = findViewById(R.id.password);
         nameEditText = findViewById(R.id.name);
         cardnumberEditText = findViewById(R.id.card_number);
         cardcvsEditText = findViewById(R.id.card_cvs);
         emailEditText = findViewById(R.id.email);
-        loginText = findViewById(R.id.login_text);
+        TextView loginText = findViewById(R.id.login_text);
         nifEditText = findViewById(R.id.nif);
         queue = Volley.newRequestQueue(this);
         login_intent = new Intent( this, LoginActivity.class);
         urlLogin = "http://" + Util.ip_address + ":3000/user/register";
+
+        /*
+        try {
+            KeyStore ks = KeyStore.getInstance(Constants.ANDROID_KEYSTORE);
+            ks.load(null);
+            KeyStore.Entry entry = ks.getEntry(Constants.keyname, null);
+            hasKey = (entry != null);
+        }
+        catch (Exception e) {
+            hasKey = false;
+        }
+        tvNoKey.setText(hasKey?"Keys already generated":"No keys!");*/
 
         loginText.setOnClickListener((v)->login());
         registerButton.setOnClickListener((v)->register());
@@ -92,23 +92,52 @@ public class RegisterActivity extends AppCompatActivity {
         final String nif = nifEditText.getText().toString();
         UUID id = UUID.randomUUID();
 
-        /*try {
+        /*if(!hasKey) {
+            try {
+                Calendar start = new GregorianCalendar();
+                Calendar end = new GregorianCalendar();
+                end.add(Calendar.YEAR, 20);            // 20 years validity
+                KeyPairGenerator kgen = KeyPairGenerator.getInstance(Constants.KEY_ALGO, Constants.ANDROID_KEYSTORE);
+                AlgorithmParameterSpec spec = new KeyPairGeneratorSpec.Builder(this)
+                        .setKeySize(Constants.KEY_SIZE)
+                        .setAlias(Constants.keyname)                                       // the name of the key (common name) to retrieve it
+                        .setSubject(new X500Principal("CN=" + Constants.keyname))
+                        .setSerialNumber(BigInteger.valueOf(Constants.CERT_SERIAL))       // a serial number to the public key certificate
+                        .setStartDate(start.getTime())
+                        .setEndDate(end.getTime())
+                        .build();
+                kgen.initialize(spec);
+                KeyPair kp = kgen.generateKeyPair();
+                pub = kp.getPublic();                                          // the corresponding public key in a Java class (PublicKey)
+                hasKey = true;
+            } catch (Exception e) {
+                tvNoKey.setText(e.getMessage());
+                return;
+            }
+        }
+
+        X509Certificate cert;
+
+        try {
             KeyStore ks = KeyStore.getInstance(Constants.ANDROID_KEYSTORE);
             ks.load(null);
             KeyStore.Entry entry = ks.getEntry(Constants.keyname, null);
-            PublicKey pub = ((KeyStore.PrivateKeyEntry)entry).getCertificate().getPublicKey();
-            Certificate certificate = ((KeyStore.PrivateKeyEntry)entry).getCertificate();
+            if (entry != null) {
+                cert = (X509Certificate)((KeyStore.PrivateKeyEntry)entry).getCertificate();
+                String b64Cert = Base64.encodeToString(cert.getEncoded(), Base64.NO_WRAP);    // transform into Base64 string (PEM format without the header and footer)
+                //send to server
+            }
         }
-        catch (Exception ex) {
-            Log.d(TAG, ex.getMessage());
+        catch (Exception e) {
+            tvNoKey.setText(e.getMessage());
         }*/
 
         final String encrypt_password = PasswordUtil.generateEncryptedPassword(password);
 
         System.out.println(encrypt_password);
 
-        HashMap info= new HashMap();
-        info.put("id", id);
+        HashMap<String, String> info= new HashMap<>();
+        info.put("id", id.toString());
         info.put("email", email);
         info.put("username", username);
         info.put("name", name);
@@ -158,6 +187,13 @@ public class RegisterActivity extends AppCompatActivity {
         dialog.setTitle(title);
         alertDialog=dialog.create();
         alertDialog.show();
+    }
+
+    String byteArrayToHex(byte[] ba) {
+        StringBuilder sb = new StringBuilder(ba.length * 2);
+        for(byte b: ba)
+            sb.append(String.format("%02x", b));
+        return sb.toString();
     }
 
 }

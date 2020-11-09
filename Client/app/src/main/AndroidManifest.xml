@@ -12,12 +12,12 @@
         android:theme="@style/AppTheme"
         android:networkSecurityConfig="@xml/network_security_config">
 
-        <activity android:name=".ui.login.MainActivity"></activity>
+        <activity android:name=".ui.client.MainActivity"></activity>
         <activity
-            android:name=".ui.login.RegisterActivity"
+            android:name=".ui.client.RegisterActivity"
             android:label="Register" />
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".ui.client.LoginActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,15 +26,19 @@
         </activity>
 
         <activity
-            android:name=".ui.login.DetailsTransaction"
+            android:name=".ui.client.DetailsTransaction"
             android:label="Register" />
 
         <activity
-            android:name=".ui.login.ProfileActivity"
+            android:name=".ui.client.ProfileActivity"
             android:label="Profile" />
 
         <activity
-            android:name=".ui.login.TransactionActivity"
+            android:name=".ui.client.TransactionActivity"
+            android:label="Transaction" />
+
+        <activity
+            android:name=".ui.client.NewTransactionActivity"
             android:label="Transaction" />
     </application>
 

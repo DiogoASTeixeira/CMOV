@@ -1,4 +1,4 @@
-package com.feup.acme_cafe.ui.login;
+package com.feup.acme_cafe.ui.client;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.security.KeyPairGeneratorSpec;
 import android.util.Log;
@@ -19,7 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,6 +26,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.feup.acme_cafe.R;
 import com.feup.acme_cafe.data.model.Product;
+import com.feup.acme_cafe.data.model.Transaction;
 import com.feup.acme_cafe.data.model.User;
 
 import java.io.IOException;
@@ -39,6 +39,7 @@ import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.AlgorithmParameterSpec;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -49,21 +50,49 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private static final String TAG = "";
     ProductAdapter adapter;
-    private RequestQueue queue;
     User user;
     List<Product> products;
-    private String ids[];
+    private String[] ids;
     AlertDialog alertDialog;
+    private Intent new_transaction_activity_intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         user = (User) getIntent().getSerializableExtra("user");
+        new_transaction_activity_intent = new Intent(this, NewTransactionActivity.class);
         products = user.getProducts();
-        queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(this);
         displayProducts();
-        genKeyPair();
+
+        Button checkout = findViewById(R.id.checkout);
+        checkout.setOnClickListener((v) -> checkout(user));
+
+        //genKeyPair();
+    }
+
+    private void checkout(User user) {
+        int count = adapter.getCount();
+        List<Product> products = new ArrayList<>();
+        float total_value = 0;
+
+        for(int i = 0; i < count; i++){
+            Product product = adapter.getItem(i);
+            if( product.getCount() > 0){
+                total_value += (product.getPrice() * product.getCount());
+                products.add(product);
+            }
+        }
+
+        Transaction trans = new Transaction();
+        trans.setProducts(products);
+        trans.setTotal_value(total_value);
+
+        user.setBasket(trans);
+
+        new_transaction_activity_intent.putExtra("user", user);
+        startActivity(new_transaction_activity_intent);
     }
 
     private void displayProducts() {
@@ -72,20 +101,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             bar.setDisplayShowHomeEnabled(true);
         }
 
-        adapter = new ProductAdapter(this, R.layout.row, user.getProducts());
+        adapter = new ProductAdapter(this, user.getProducts());
 
         ListView productsList = findViewById(R.id.listview);
         productsList.setAdapter(adapter);
 
-        /*List.setOnItemClickListener((parent, view, position, id) -> {
-            openDetails(ids[position]);
-        });*/
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     @Override
@@ -98,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.add) {
-            Intent i = new Intent(this, NewTransaction.class);
+            Intent i = new Intent(this, NewTransactionActivity.class);
             i.putExtra("user", user);
             startActivity(i);
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -120,9 +140,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Util.deletefile(getApplicationContext());
                 startActivity(i);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
 
@@ -203,13 +221,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-    class ProductAdapter extends ArrayAdapter<Product> {
-        private int layoutResource;
-        private Context mContext;
+    static class ProductAdapter extends ArrayAdapter<Product> {
+        private final int layoutResource;
+        private final Context mContext;
 
-        ProductAdapter(@NonNull Context context, int resource, @NonNull List<Product> objects) {
-            super(context, resource, objects);
-            layoutResource = resource;
+        ProductAdapter(@NonNull Context context, @NonNull List<Product> objects) {
+            super(context, R.layout.row, objects);
+            layoutResource = R.layout.row;
             mContext = context;
         }
 
@@ -229,13 +247,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             if (p != null) {
                 TextView name = line.findViewById(R.id.prod_name);
                 TextView price = line.findViewById(R.id.prod_price);
-                ImageView icon = line.findViewById(R.id.icon);
+                p.setCount(0);
+                Button increase = line.findViewById(R.id.increase);
+                View finalLine = line;
+                increase.setOnClickListener((v)->increaseQuantity(finalLine, p));
 
-                String url = p.getUrl();
-                String parsedUrl = url.substring(2);
-                String fullUrl = "../../.." + parsedUrl;
+                Button decrease = line.findViewById(R.id.decrease);
+                decrease.setOnClickListener((v)->decreaseQuantity(finalLine, p));
 
-                Uri uri = Uri.parse(fullUrl);
 
                 if (price != null) {
                     price.setText(p.getPrice().toString() + "€");
@@ -245,17 +264,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     name.setText(p.getName());
                 }
 
-                if(url != null) {
-                    icon.setImageURI(uri);
-                }
             }
 
             return line;
         }
 
+        private void increaseQuantity(View line, Product p) {
+            TextView amountText = line.findViewById(R.id.amount);
+            int amount = Integer.parseInt(amountText.getText().toString()) + 1;
+            amountText.setText(Integer.toString(amount));
+            p.setCount(amount);
+        }
+
+        private void decreaseQuantity(View line, Product p) {
+            TextView amountText = line.findViewById(R.id.amount);
+            int amount = Integer.parseInt(amountText.getText().toString()) - 1;
+            if(amount == -1) {
+                amount = 0;
+            }
+            amountText.setText(Integer.toString(amount));
+            p.setCount(amount);
+        }
     }
 
-    class PubKey {
+    static class PubKey {
         byte[] modulus;
         byte[] exponent;
     }

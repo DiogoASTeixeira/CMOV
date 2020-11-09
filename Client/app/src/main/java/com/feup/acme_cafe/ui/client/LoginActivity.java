@@ -1,10 +1,9 @@
-package com.feup.acme_cafe.ui.login;
+package com.feup.acme_cafe.ui.client;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,7 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,8 +36,6 @@ public class LoginActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.feup.acme_cafe_app.USERNAME";
     private EditText emailEditText;
     private EditText passwordEditText;
-    private TextView registerText;
-    private Button loginButton;
     private String urlLogin = "";
     private String urlVoucher = "";
     private String urlTransaction = "";
@@ -48,17 +44,16 @@ public class LoginActivity extends AppCompatActivity {
     private Intent main_activity_intent;
     AlertDialog alertDialog;
 
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        loginButton = findViewById(R.id.login);
+        Button loginButton = findViewById(R.id.login);
         emailEditText = findViewById(R.id.email);
         passwordEditText = findViewById(R.id.password);
-        registerText = findViewById(R.id.register_text);
+        TextView registerText = findViewById(R.id.register_text);
         queue = Volley.newRequestQueue(this);
         register_intent = new Intent( this, RegisterActivity.class);
         main_activity_intent = new Intent(this, MainActivity.class);
@@ -69,10 +64,8 @@ public class LoginActivity extends AppCompatActivity {
         try {
             User user = Util.loadUser(getApplicationContext());
             if (user != null)
-                openStore(user);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+                getTransactions(user);
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -105,21 +98,17 @@ public class LoginActivity extends AppCompatActivity {
         queue.add(jsonobj);
     }
 
-    public void getTransactions(User user) throws JSONException {
-        Map info= new HashMap();
+    public void getTransactions(User user) {
+        Map<String, String> info= new HashMap<>();
         info.put("UserId", user.getId());
-        List list = new ArrayList();
+        List<JSONObject> list = new ArrayList<>();
         list.add(new JSONObject(info));
 
         JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.POST, urlTransaction, new JSONArray(list),
                 response -> {
                     Log.d("transactions response", response.toString());
-                    try {
-                        user.setTransactions(response);
-                        getVouchers(user);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    user.setTransactions(response);
+                    getVouchers(user);
                 },
                 error -> {
                     setAndShowAlertDialog("Server Error", "Unexpected Server Error");
@@ -129,11 +118,11 @@ public class LoginActivity extends AppCompatActivity {
         queue.add(jsonobj);
     }
 
-    public void getVouchers(User user) throws JSONException {
+    private void getVouchers(User user) {
 
-        Map info= new HashMap();
+        Map<String,String> info= new HashMap<>();
         info.put("UserId", user.getId());
-        List list = new ArrayList();
+        List<JSONObject> list = new ArrayList<>();
         list.add(new JSONObject(info));
 
         JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.POST, urlVoucher, new JSONArray(list),
@@ -170,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
 
         final String encrypted_password = PasswordUtil.generateEncryptedPassword(password);
 
-        HashMap info= new HashMap();
+        HashMap<String, String> info= new HashMap<>();
         info.put("email", email);
         info.put("password", encrypted_password);
 

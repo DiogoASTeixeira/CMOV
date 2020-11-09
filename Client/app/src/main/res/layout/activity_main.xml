@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
         android:layout_margin="10dp"
-        android:text="Menu"
+        android:text="@string/menu"
         android:textColor="#F44336"
         android:textSize="30sp" />
 
@@ -24,10 +24,17 @@
     <ListView
         android:id="@+id/listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="500dp" />
 
     <TextView
         android:id="@+id/empty_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/checkout"
+        android:layout_width="match_parent"
+        android:layout_height="69dp"
+        android:text="Checkout" />
+
 </LinearLayout>

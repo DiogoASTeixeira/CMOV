@@ -28,4 +28,7 @@
     <string name="tv_message_template">Value(%d b): \"%s\"</string>
     <string name="check_profile">Profile Page</string>
     <string name="ip_address">10.227.149.133</string>
+    <string name="menu">Menu</string>
+    <string name="product_icon">product_icon</string>
+    <string name="logout">Logout</string>
 </resources>

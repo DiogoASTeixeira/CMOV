@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Products {
-    private List<Product> products;
+    private final List<Product> products;
 
     public Products() {
         products = new ArrayList<>();
@@ -22,14 +22,18 @@ public class Products {
         for (int i = 0; i < response.length(); i++) {
             try {
                 JSONObject jsonobject = response.getJSONObject(i);
+                String id = jsonobject.getString("id");
                 String name = jsonobject.getString("name");
                 String price = jsonobject.getString("value");
                 String url = jsonobject.getString("icon_path");
-                Product t = new Product(name, Float.parseFloat(price), url);
-                products.add(t);
+                Product t = new Product(id, name, Float.parseFloat(price), url);
+                if(!products.contains(t)){
+                    products.add(t);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
+
 }

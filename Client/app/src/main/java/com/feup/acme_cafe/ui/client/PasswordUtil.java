@@ -1,4 +1,4 @@
-package com.feup.acme_cafe.ui.login;
+package com.feup.acme_cafe.ui.client;
 
 import android.os.Build;
 
@@ -22,8 +22,6 @@ public class PasswordUtil {
         }
         byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
 
-        String encoded = Base64.getEncoder().encodeToString(hash);
-
-        return encoded;
+        return Base64.getEncoder().encodeToString(hash);
     }
 }

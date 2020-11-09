@@ -1,13 +1,11 @@
-package com.feup.acme_cafe.ui.login;
+package com.feup.acme_cafe.ui.client;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.feup.acme_cafe.data.model.Transaction;
 import com.feup.acme_cafe.data.model.User;
 import com.feup.acme_cafe.R;
 

@@ -1,9 +1,8 @@
-package com.feup.acme_cafe.ui.login;
+package com.feup.acme_cafe.ui.client;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +27,8 @@ public class TransactionActivity extends AppCompatActivity implements AdapterVie
 
     private static final String TAG = "";
     TransactionActivity.TransactionAdapter adapter;
-    private RequestQueue queue;
     User user;
-    private String ids[];
+    private String[] ids;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +47,14 @@ public class TransactionActivity extends AppCompatActivity implements AdapterVie
             ids[i] = user.getTransactions().get(i).getId();
         }
 
-        adapter = new TransactionActivity.TransactionAdapter(this, R.layout.rowdate, user.getTransactions());
+        adapter = new TransactionAdapter(this, user.getTransactions());
 
         ListView transactionList = findViewById(R.id.listview);
         transactionList.setAdapter(adapter);
 
-        transactionList.setOnItemClickListener((parent, view, position, id) -> {
-            openDetails(ids[position]);
-        });
+        transactionList.setOnItemClickListener((parent, view, position, id) -> openDetails(ids[position]));
 
-        queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(this);
     }
 
     @Override
@@ -72,13 +68,13 @@ public class TransactionActivity extends AppCompatActivity implements AdapterVie
         startActivity(i);
     }
 
-    class TransactionAdapter extends ArrayAdapter<Transaction> {
-        private int layoutResource;
-        private Context mContext;
+    static class TransactionAdapter extends ArrayAdapter<Transaction> {
+        private final int layoutResource;
+        private final Context mContext;
 
-        TransactionAdapter(@NonNull Context context, int resource, @NonNull List<Transaction> objects) {
-            super(context, resource, objects);
-            layoutResource = resource;
+        TransactionAdapter(@NonNull Context context, @NonNull List<Transaction> objects) {
+            super(context, R.layout.rowdate, objects);
+            layoutResource = R.layout.rowdate;
             mContext = context;
 
         }

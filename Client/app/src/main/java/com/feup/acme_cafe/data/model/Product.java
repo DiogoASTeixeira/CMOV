@@ -1,5 +1,7 @@
 package com.feup.acme_cafe.data.model;
 
+import androidx.annotation.Nullable;
+
 import java.io.Serializable;
 
 public class Product implements Serializable {
@@ -8,7 +10,14 @@ public class Product implements Serializable {
     private String id;
     private String name;
     private float price;
-    private Integer count;
+    private int count;
+
+    public Product(String id, String name, Float price, String imageUrl){
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
 
     public String getId() {
         return id;
@@ -34,27 +43,18 @@ public class Product implements Serializable {
         this.price = price;
     }
 
-
-    //id;name;price
-    public Product(String content){
-        String[] ss = content.split(";");
-        id = ss[0];
-        name = ss[1];
-        price = Float.parseFloat(ss[2]);
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(obj instanceof Product){
+            Product aux = (Product) obj;
+            return this.id.equals(aux.id);
+        }
+        return false;
     }
 
-    public Product(String name, Float price, String imageUrl){
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
+    public int getCount() { return  count; }
 
-    public Product(String name, Float price, Integer count){
-        this.name = name;
-        this.price = price;
-        this.count = count;
-    }
-
+    public void setCount(int count) { this.count = count; }
 
     public String getUrl() {
         return this.imageUrl;

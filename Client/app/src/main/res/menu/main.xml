@@ -5,12 +5,9 @@
 
 
     <item
-        android:id="@+id/add"
-        android:title="@string/mn_it_add"/>
-    <item
         android:id="@+id/profile"
         android:title="@string/check_profile"/>
     <item
         android:id="@+id/logout"
-        android:title="Logout"/>
+        android:title="@string/logout"/>
 </menu>
