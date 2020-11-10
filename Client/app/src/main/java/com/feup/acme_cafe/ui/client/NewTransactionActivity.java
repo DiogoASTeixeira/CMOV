@@ -15,6 +15,8 @@ import com.feup.acme_cafe.data.model.User;
 import com.feup.acme_cafe.R;
 import com.feup.acme_cafe.data.model.Voucher;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class NewTransactionActivity extends AppCompatActivity {
@@ -138,7 +140,7 @@ public class NewTransactionActivity extends AppCompatActivity {
         voucherButton.setOnClickListener((v) ->  builder.show());
     }
 
-    private double getCoffeePrice(Transaction basket) {
+    private double getCoffeePrice(@NotNull Transaction basket) {
         double coffee_price = 0;
 
         for(int i = 0; i < basket.getProducts().size(); i++){
