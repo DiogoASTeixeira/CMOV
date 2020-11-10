@@ -4,9 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
+import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -14,10 +22,18 @@ import com.feup.acme_cafe.data.model.Transaction;
 import com.feup.acme_cafe.data.model.User;
 import com.feup.acme_cafe.R;
 import com.feup.acme_cafe.data.model.Voucher;
+import com.google.zxing.WriterException;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import androidmads.library.qrgenearator.QRGContents;
+import androidmads.library.qrgenearator.QRGEncoder;
+import androidmads.library.qrgenearator.QRGSaver;
 
 public class NewTransactionActivity extends AppCompatActivity {
     static final String ACTION_SCAN = "com.google.zxing.client.android.SCAN";
@@ -29,6 +45,9 @@ public class NewTransactionActivity extends AppCompatActivity {
     AlertDialog alertDialog;
     Util.ProductAdapter adapter;
     ListView productsListView;
+
+    String savePath = Environment.getExternalStorageDirectory().getPath() + "/QRCode/";
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +75,13 @@ public class NewTransactionActivity extends AppCompatActivity {
         productsListView.setAdapter(adapter);
 
         finishButton = findViewById(R.id.generateQRcode);
-        finishButton.setOnClickListener((v) -> generateQRCode());
+        finishButton.setOnClickListener((v) -> {
+            try {
+                generateQRCode();
+            } catch (WriterException e) {
+                e.printStackTrace();
+            }
+        });
 
         TextView totalView = findViewById(R.id.prod_price);
         totalView.setText(basket.getTotal_value() + " €");
@@ -71,21 +96,72 @@ public class NewTransactionActivity extends AppCompatActivity {
         voucherAdapter();
     }
 
-    private void generateQRCode() {
+    private void generateQRCode() throws WriterException {
+        HashMap<String, Object> transaction = parseTransaction();
 
+        List<JSONObject> list = new ArrayList<>();
+        list.add(new JSONObject(transaction));
+
+        String transactionStr = list.get(0).toString();
+
+        WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        Display display = manager.getDefaultDisplay();
+        Point point = new Point();
+        display.getSize(point);
+        int width = point.x;
+        int height = point.y;
+        int smallerDimension = width < height ? width : height;
+        smallerDimension = smallerDimension * 3 / 4;
+
+        QRGEncoder qrgEncoder = new QRGEncoder(transactionStr, null, QRGContents.Type.TEXT, smallerDimension);
+
+        try {
+            // Getting QR-Code as Bitmap
+            bitmap = qrgEncoder.encodeAsBitmap();
+            // Setting Bitmap to ImageView
+            ImageView qrcode = findViewById(R.id.QR_Image);
+            qrcode.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            Log.v("QRCode Generation", e.toString());
+        }
+
+        QRGSaver.save(savePath, "qrcode", bitmap, QRGContents.ImageType.IMAGE_JPEG);
     }
 
-    public String parseTransaction(Float discount, String voucher) {
-        StringBuilder contents = new StringBuilder();
-        for (int i = 0; i < basket.getProducts().size(); i++) {
-            contents.append(basket.getProducts().get(i).getId()).append(";").append(basket.getProducts().get(i).getPrice().toString());
-            if (i < basket.getProducts().size() - 1)
-                contents.append("|");
+    public HashMap<String, Object> parseTransaction() {
+        //Create voucher Map
+        TextView voucherView = findViewById(R.id.selectedVoucherText);
+        String voucherName = voucherView.getText().toString();
+        Voucher voucher = null;
+        for(int i = 0; i < user.getVouchers().size(); i++){
+            if(user.getVouchers().get(i).getName().equals(voucherName))
+                voucher = user.getVouchers().get(i);
         }
-        if (voucher.equals(""))
-            voucher = "0";
-        contents.append(",").append(voucher).append(",").append(discount).append(",").append(user.getId());
-        return contents.toString();
+        HashMap<String, Object> voucherMap = new HashMap<>();
+        voucherMap.put("id", voucher.getId());
+        voucherMap.put("used", voucher.isUsed());
+        voucherMap.put("coffee", voucher.isCoffee());
+        voucherMap.put("UserId", user.getId());
+
+        //create products Map
+        ArrayList<HashMap<String, Object>> products = new ArrayList<>();
+        for(int i = 0; i < user.getBasket().getProducts().size(); i++){
+            HashMap<String, Object> product = new HashMap<>();
+            product.put("id", user.getBasket().getProducts().get(i).getId());
+            product.put("name", user.getBasket().getProducts().get(i).getName());
+            product.put("price", user.getBasket().getProducts().get(i).getPrice());
+            for(int j = 0; j < user.getBasket().getProducts().get(i).getCount(); j++){
+                products.add(product);
+            }
+        }
+
+        //create TransactionMap
+        HashMap<String, Object> transactionMap = new HashMap<>();
+        transactionMap.put("UserId", user.getId());
+        transactionMap.put("voucher", voucherMap);
+        transactionMap.put("products", products);
+
+        return transactionMap;
     }
 
     public void backButton(View view) {
@@ -157,6 +233,7 @@ public class NewTransactionActivity extends AppCompatActivity {
 
         return coffee_price;
     }
+
 
     private void setAndShowAlertDialog(){
         AlertDialog.Builder dialog=new AlertDialog.Builder(this);
