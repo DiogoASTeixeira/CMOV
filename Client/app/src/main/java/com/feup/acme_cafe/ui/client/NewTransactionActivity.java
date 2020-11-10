@@ -56,7 +56,7 @@ public class NewTransactionActivity extends AppCompatActivity {
         productsListView.setAdapter(adapter);
 
         finishButton = findViewById(R.id.generateQRcode);
-        //finishButton.setOnClickListener((v) -> generateQRcode());
+        finishButton.setOnClickListener((v) -> generateQRCode());
 
         TextView totalView = findViewById(R.id.prod_price);
         totalView.setText(basket.getTotal_value() + " €");
@@ -69,6 +69,10 @@ public class NewTransactionActivity extends AppCompatActivity {
         totalwithdiscountview.setText(basket.getTotal_value() + " €");
 
         voucherAdapter();
+    }
+
+    private void generateQRCode() {
+
     }
 
     public String parseTransaction(Float discount, String voucher) {
@@ -117,6 +121,9 @@ public class NewTransactionActivity extends AppCompatActivity {
                 basket.setVoucher(voucher);
 
             voucherView.setText(basket.getVoucher());
+
+            String voucherName = voucherView.getText().toString();
+            
 
             if(voucherView.getText().equals("Normal Voucher")){
                 double discount = 0.05 * basket.getTotal_value();

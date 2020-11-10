@@ -3,12 +3,16 @@ package com.feup.acme_cafe.data.model;
 import androidx.annotation.Nullable;
 
 import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Voucher implements Serializable {
 
     private final String id;
     private final boolean coffee;
     private final String name;
+    private final boolean used = false;
+    private static final AtomicInteger countC = new AtomicInteger(0);
+    private static final AtomicInteger countN = new AtomicInteger(0);
 
     @Override
     public boolean equals(@Nullable Object obj) {
@@ -22,9 +26,9 @@ public class Voucher implements Serializable {
         this.id = id;
         this.coffee = coffee;
         if(coffee){
-            name = "Coffee Voucher";
+            name = "Coffee Voucher " + countC.incrementAndGet(); ;
         } else {
-            name = "Normal Voucher";
+            name = "Normal Voucher " + countN.incrementAndGet(); ;
         }
     }
 
@@ -38,5 +42,9 @@ public class Voucher implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isUsed() {
+        return used;
     }
 }

@@ -57,7 +57,9 @@ sequelize
         {id: "b1a3k3v1-cte0-4ab3-b1ce-67cf4d3935ac", used:false, coffee: "false", UserId:"b0e76929-9762-45b7-be1f-2f37d2edf33c", TransactionId:null},
         {id: "b1a3k3v1-cte1-4ab3-b1ce-67cf4d3935ac", used:true, coffee: "false", UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e", TransactionId:"82d7e51b-9b63-4570-bf32-da837ec09981"},
         {id: "b1a3k3v1-cfd2-4ab3-b1ce-67cf4d3935ac", used:false, coffee: "true", UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e", TransactionId:null},
-
+        {id: "b1a3k3v1-cfd3-4ab3-b1ce-67cf4d3935ac", used:false, coffee: "true", UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e", TransactionId:null},
+        {id: "b1a3k3v1-cte4-4ab3-b1ce-67cf4d3935ac", used:false, coffee: "false", UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e", TransactionId:null},
+        {id: "b1a3k3v1-cte5-4ab3-b1ce-67cf4d3935ac", used:false, coffee: "false", UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e", TransactionId:null},
       ])
     })
       .then(() => {
