@@ -122,14 +122,11 @@ public class NewTransactionActivity extends AppCompatActivity {
 
             voucherView.setText(basket.getVoucher());
 
-            String voucherName = voucherView.getText().toString();
-            
-
-            if(voucherView.getText().equals("Normal Voucher")){
+            if(voucherView.getText().toString().contains("Normal Voucher")){
                 double discount = 0.05 * basket.getTotal_value();
                 double new_total = basket.getTotal_value() - discount;
                 total_with_discount.setText(String.valueOf(new_total));
-            } else if (voucherView.getText().equals("Coffee Voucher")) {
+            } else if (voucherView.getText().toString().contains("Coffee Voucher")) {
                 double coffee_price = getCoffeePrice(basket);
                 if(coffee_price > 0){
                     double new_total = basket.getTotal_value() - coffee_price;
@@ -137,6 +134,8 @@ public class NewTransactionActivity extends AppCompatActivity {
                 } else {
                     setAndShowAlertDialog();
                     basket.setVoucher("No Voucher Selected");
+                    voucherView.setText(basket.getVoucher());
+                    total_with_discount.setText(String.valueOf(basket.getTotal_value()));
                 }
             } else {
                 total_with_discount.setText(String.valueOf(basket.getTotal_value()));
