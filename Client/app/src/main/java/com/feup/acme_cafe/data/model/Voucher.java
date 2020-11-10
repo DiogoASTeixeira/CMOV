@@ -10,7 +10,6 @@ public class Voucher implements Serializable {
     private final String id;
     private final boolean coffee;
     private final String name;
-    private final boolean used = false;
     private static final AtomicInteger countC = new AtomicInteger(0);
     private static final AtomicInteger countN = new AtomicInteger(0);
 
@@ -26,9 +25,9 @@ public class Voucher implements Serializable {
         this.id = id;
         this.coffee = coffee;
         if(coffee){
-            name = "Coffee Voucher " + countC.incrementAndGet(); ;
+            name = "Coffee Voucher " + countC.incrementAndGet();
         } else {
-            name = "Normal Voucher " + countN.incrementAndGet(); ;
+            name = "Normal Voucher " + countN.incrementAndGet();
         }
     }
 
@@ -45,6 +44,7 @@ public class Voucher implements Serializable {
     }
 
     public boolean isUsed() {
+        boolean used = false;
         return used;
     }
 }

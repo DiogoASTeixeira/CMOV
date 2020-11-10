@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -22,7 +21,6 @@ import com.feup.acme_cafe.data.model.Transaction;
 import com.feup.acme_cafe.data.model.User;
 import com.feup.acme_cafe.R;
 import com.feup.acme_cafe.data.model.Voucher;
-import com.google.zxing.WriterException;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -33,7 +31,6 @@ import java.util.List;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
-import androidmads.library.qrgenearator.QRGSaver;
 
 public class NewTransactionActivity extends AppCompatActivity {
     static final String ACTION_SCAN = "com.google.zxing.client.android.SCAN";
@@ -75,13 +72,7 @@ public class NewTransactionActivity extends AppCompatActivity {
         productsListView.setAdapter(adapter);
 
         finishButton = findViewById(R.id.generateQRcode);
-        finishButton.setOnClickListener((v) -> {
-            try {
-                generateQRCode();
-            } catch (WriterException e) {
-                e.printStackTrace();
-            }
-        });
+        finishButton.setOnClickListener((v) -> generateQRCode());
 
         TextView totalView = findViewById(R.id.prod_price);
         totalView.setText(basket.getTotal_value() + " €");
@@ -96,7 +87,7 @@ public class NewTransactionActivity extends AppCompatActivity {
         voucherAdapter();
     }
 
-    private void generateQRCode() throws WriterException {
+    private void generateQRCode()  {
         HashMap<String, Object> transaction = parseTransaction();
 
         List<JSONObject> list = new ArrayList<>();
@@ -116,16 +107,15 @@ public class NewTransactionActivity extends AppCompatActivity {
         QRGEncoder qrgEncoder = new QRGEncoder(transactionStr, null, QRGContents.Type.TEXT, smallerDimension);
 
         try {
-            // Getting QR-Code as Bitmap
             bitmap = qrgEncoder.encodeAsBitmap();
-            // Setting Bitmap to ImageView
             ImageView qrcode = findViewById(R.id.QR_Image);
             qrcode.setImageBitmap(bitmap);
         } catch (Exception e) {
             Log.v("QRCode Generation", e.toString());
         }
 
-        QRGSaver.save(savePath, "qrcode", bitmap, QRGContents.ImageType.IMAGE_JPEG);
+        //Do we really need to save?
+        //QRGSaver.save(savePath, "qrcode", bitmap, QRGContents.ImageType.IMAGE_JPEG);
     }
 
     public HashMap<String, Object> parseTransaction() {
@@ -138,10 +128,14 @@ public class NewTransactionActivity extends AppCompatActivity {
                 voucher = user.getVouchers().get(i);
         }
         HashMap<String, Object> voucherMap = new HashMap<>();
-        voucherMap.put("id", voucher.getId());
-        voucherMap.put("used", voucher.isUsed());
-        voucherMap.put("coffee", voucher.isCoffee());
-        voucherMap.put("UserId", user.getId());
+        if(voucher != null) {
+            voucherMap.put("id", voucher.getId());
+            voucherMap.put("used", voucher.isUsed());
+            voucherMap.put("coffee", voucher.isCoffee());
+            voucherMap.put("UserId", user.getId());
+        } else {
+            voucherMap = null;
+        }
 
         //create products Map
         ArrayList<HashMap<String, Object>> products = new ArrayList<>();
@@ -233,7 +227,6 @@ public class NewTransactionActivity extends AppCompatActivity {
 
         return coffee_price;
     }
-
 
     private void setAndShowAlertDialog(){
         AlertDialog.Builder dialog=new AlertDialog.Builder(this);

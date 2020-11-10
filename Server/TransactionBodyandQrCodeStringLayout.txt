@@ -40,3 +40,7 @@ Exemplo de body para chamada ao endpoint /user/transaction
 String no QRCode
 
 {"UserId":"32bf576f-1d83-4141-9009-8d4c6435d10e","voucher":{"UserId":"32bf576f-1d83-4141-9009-8d4c6435d10e","coffee":false,"id":"b1a3k3v1-cte4-4ab3-b1ce-67cf4d3935ac","used":false},"products":[{"price":20,"name":"Coffee","id":"d93402fb-8af4-40e0-8c0d-7a05485405f3"},{"price":30,"name":"Sandwich","id":"c19817fe-2b3b-4c48-877e-7ea98f081e74"},{"price":20,"name":"Milk","id":"a807813a-70a6-45d1-b27f-42a406ff2321"},{"price":50,"name":"Orange Juice","id":"6b6e76f5-85cf-4b65-9697-979524ae0c19"}]}
+
+String no QRCode quando voucher null
+
+{"UserId":"32bf576f-1d83-4141-9009-8d4c6435d10e","voucher":null,"products":[{"price":20,"name":"Coffee","id":"d93402fb-8af4-40e0-8c0d-7a05485405f3"},{"price":30,"name":"Sandwich","id":"c19817fe-2b3b-4c48-877e-7ea98f081e74"},{"price":20,"name":"Milk","id":"a807813a-70a6-45d1-b27f-42a406ff2321"},{"price":50,"name":"Orange Juice","id":"6b6e76f5-85cf-4b65-9697-979524ae0c19"}]}

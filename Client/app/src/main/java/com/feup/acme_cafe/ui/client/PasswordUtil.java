@@ -20,6 +20,7 @@ public class PasswordUtil {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+        assert digest != null;
         byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
 
         return Base64.getEncoder().encodeToString(hash);
