@@ -157,6 +157,7 @@ public class RegisterActivity extends AppCompatActivity {
                             } else {
                                 setAndShowAlertDialog("Register Success", "Please Login now");
                                 Log.d("register", "Successful REGIST");
+                                login();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -170,7 +171,6 @@ public class RegisterActivity extends AppCompatActivity {
             };
 
             queue.add(jsonobj);
-            login();
         }
         else {
             setAndShowAlertDialog("Register Error", "All the fields must be filled");
