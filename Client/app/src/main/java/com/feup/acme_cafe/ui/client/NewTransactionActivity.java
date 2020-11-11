@@ -130,9 +130,6 @@ public class NewTransactionActivity extends AppCompatActivity {
         HashMap<String, Object> voucherMap = new HashMap<>();
         if(voucher != null) {
             voucherMap.put("id", voucher.getId());
-            voucherMap.put("used", voucher.isUsed());
-            voucherMap.put("coffee", voucher.isCoffee());
-            voucherMap.put("UserId", user.getId());
         } else {
             voucherMap = null;
         }
@@ -142,8 +139,6 @@ public class NewTransactionActivity extends AppCompatActivity {
         for(int i = 0; i < user.getBasket().getProducts().size(); i++){
             HashMap<String, Object> product = new HashMap<>();
             product.put("id", user.getBasket().getProducts().get(i).getId());
-            product.put("name", user.getBasket().getProducts().get(i).getName());
-            product.put("price", user.getBasket().getProducts().get(i).getPrice());
             for(int j = 0; j < user.getBasket().getProducts().get(i).getCount(); j++){
                 products.add(product);
             }

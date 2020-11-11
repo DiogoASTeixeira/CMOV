@@ -3,36 +3,23 @@ Exemplo de body para chamada ao endpoint /user/transaction
 {
     "UserId": "b0e76929-9762-45b7-be1f-2f37d2edf33c",
     "voucher": {
-        "id": "b1a3k3v1-cte0-4ab3-b1ce-67cf4d3935ac",
-        "used": false,
-        "coffee": false,
-        "UserId": "b0e76929-9762-45b7-be1f-2f37d2edf33c"
+        "id": "b1a3k3v1-cte0-4ab3-b1ce-67cf4d3935ac"
     },
     "products": [
         {
-            "id": "c19817fe-2b3b-4c48-877e-7ea98f081e74",
-            "name": "Sandwich",
-            "price": 30
+            "id": "c19817fe-2b3b-4c48-877e-7ea98f081e74"
         }, 
         {
-            "id": "c19817fe-2b3b-4c48-877e-7ea98f081e74",
-            "name": "Sandwich",
-            "price": 30
+            "id": "c19817fe-2b3b-4c48-877e-7ea98f081e74"
         },
         {
-            "id": "c19817fe-2b3b-4c48-877e-7ea98f081e74",
-            "name": "Sandwich",
-            "price": 30
+            "id": "c19817fe-2b3b-4c48-877e-7ea98f081e74"
         }, 
         {
-            "id": "d93402fb-8af4-40e0-8c0d-7a05485405f3",
-            "name": "coffee",
-            "price": 20
+            "id": "d93402fb-8af4-40e0-8c0d-7a05485405f3"
         },
         {
-            "id": "d93402fb-8af4-40e0-8c0d-7a05485405f3",
-            "name": "coffee",
-            "price": 20
+            "id": "d93402fb-8af4-40e0-8c0d-7a05485405f3"
         }
     ]
 }
