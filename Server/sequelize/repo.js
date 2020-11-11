@@ -94,7 +94,7 @@ async function getTransaction(id){
 }
 
 //checkout
-async function checkout(req) {
+async function checkout(req, res) {
     let transaction = {
         id: create_UUID(),
         UserId: req.body.UserId
@@ -122,11 +122,11 @@ async function checkout(req) {
                 }
             }
         });
-        Voucher.findOne({where: {id: req.body.voucher.id}}).then(voucher => {
 
+        Voucher.findOne({where: {id: req.body.voucher.id}}).then(voucher => {
             transaction.voucher = voucher;
-            
-            if (transaction.voucher != null && !transaction.voucher.used && !transaction.voucher.coffee) {
+
+            if (transaction.voucher != null && !transaction.voucher.used && !transaction.voucher.coffee && transaction.voucher.UserId == req.body.UserId) {
                 transaction.total_value = total_spent - total_spent * 0.05;
                 transaction.discount = 0.05 * total_spent;
             } else if (transaction.voucher != null && !transaction.voucher.used && transaction.voucher.coffee) {
@@ -138,7 +138,7 @@ async function checkout(req) {
                 transaction.total_value = total_spent;
                 transaction.discount = 0;
             }
-            
+
             Transaction.create(transaction)
                 .then(createdTransaction => {
                     req.body.products.forEach(product => {
@@ -244,6 +244,15 @@ async function checkout(req) {
                 }).catch(function(err) {
                     console.log(err);
                 });
+
+                let response = {
+                    status: "success",
+                    total_spent: transaction.total_value,
+                    voucher: transaction.voucher
+                };
+
+                res.json(response);
+
             }).catch(function(err) {
                 console.log(err);
             });
@@ -251,7 +260,6 @@ async function checkout(req) {
         .catch(function(err) {
             console.log(err);
         });
-    return;
 }
 
 function create_UUID(){

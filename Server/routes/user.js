@@ -34,8 +34,7 @@ router.post('/transaction/:id', async function(req, res, next) {
 });
 
 router.post('/checkout', async function(req, res, next) {
-  await productRepo.checkout(req);
-  res.send("Success");
+  await productRepo.checkout(req, res);
 });
 
 router.get('/:username', async function(req, res, next) {
