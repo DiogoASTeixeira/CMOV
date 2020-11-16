@@ -31,7 +31,7 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:textColor="#E44646"
+                android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
 
             <TextView
@@ -49,9 +49,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:textColor="#FF0000"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/colorPrimary"
             android:textColorHint="@color/colorPrimary"
-            android:textSize="30sp" />
+            android:textSize="24sp" />
 
     </LinearLayout>
 

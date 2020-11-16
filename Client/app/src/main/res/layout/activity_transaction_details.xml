@@ -10,13 +10,15 @@
 
     <ListView
         android:id="@+id/productsDetails"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toTopOf="@id/pricerow"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="396dp"
+        android:layout_height="645dp"
+        android:layout_marginBottom="62dp"
+        app:layout_constraintBottom_toBottomOf="@+id/pricerow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.101">
 
     </ListView>
 
@@ -24,40 +26,25 @@
         android:id="@+id/pricerow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:gravity="center_horizontal|center_vertical"
-        app:layout_constraintBottom_toTopOf="@id/back"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/productsDetails">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
             android:id="@+id/tvresult2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:text="Total: " />
+            android:text="Total: "
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/sumproducts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5€"
-            android:textColor="#FF0000"
-            android:textSize="36sp" />
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp" />
 
     </TableRow>
 
-    <Button
-        android:id="@+id/back"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:text="Back"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pricerow" />
 </androidx.constraintlayout.widget.ConstraintLayout>

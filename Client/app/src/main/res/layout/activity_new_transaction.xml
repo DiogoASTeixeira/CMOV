@@ -289,7 +289,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:text="No Voucher selected" />
+            android:text="No Voucher selected"
+            android:textSize="18sp" />
 
     </TableRow>
 
@@ -319,6 +320,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total: "
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/prod_price"
@@ -328,7 +330,7 @@
                 android:id="@+id/prod_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFDD00"
+                android:textColor="@color/colorPrimary"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/tvresult"
@@ -340,6 +342,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="w/ discount: "
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/prod_price"
                 app:layout_constraintRight_toLeftOf="@id/totalwithdiscount"
@@ -350,7 +353,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
-                android:textSize="30sp"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/resultwithdiscount"
                 app:layout_constraintRight_toRightOf="parent"
@@ -385,20 +388,21 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/colorPrimary"
-            android:text="Checkout"
+            android:text="QR Code"
             android:textColor="#FFFFFF" />
 
     </TableRow>
 
     <ImageView
         android:id="@+id/QR_Image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/voucherow"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productsNew"
-        app:layout_constraintVertical_bias="0.928"
+        app:layout_constraintVertical_bias="0.501"
         tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

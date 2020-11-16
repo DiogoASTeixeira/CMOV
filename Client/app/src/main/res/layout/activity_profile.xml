@@ -9,8 +9,8 @@
 
     <TableLayout
         android:id="@+id/profiledetails"
-        android:layout_width="298dp"
-        android:layout_height="283dp"
+        android:layout_width="318dp"
+        android:layout_height="337dp"
         android:layout_marginTop="84dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.425"
@@ -29,16 +29,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="Username:"
-                android:textColor="#F44336"
-                android:textSize="24sp" />
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
+                android:layout_gravity="center_vertical|end"
                 android:text="lorem"
-                android:textSize="20sp" />
+                android:textAlignment="textEnd"
+                android:textSize="18sp" />
 
         </TableRow>
 
@@ -54,16 +55,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="Name: "
-                android:textColor="#F44336"
-                android:textSize="24sp" />
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
+                android:layout_gravity="center_vertical|end"
                 android:text="iplsum"
-                android:textSize="20sp" />
+                android:textAlignment="textEnd"
+                android:textSize="18sp" />
         </TableRow>
 
         <TableRow
@@ -78,23 +80,24 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="Email"
-                android:textColor="#F44336"
-                android:textSize="24sp" />
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/email_prof"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
+                android:layout_gravity="center_vertical|end"
                 android:layout_weight="1"
                 android:text="TextView"
-                android:textSize="20sp" />
+                android:textAlignment="textStart"
+                android:textSize="18sp" />
         </TableRow>
 
         <TableRow
             android:id="@+id/voucherrow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginBottom="20dp">
 
             <TextView
@@ -103,16 +106,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="Nº vouchers: "
-                android:textColor="#F44336"
-                android:textSize="24sp" />
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/vouchers"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|end"
                 android:text="TextView"
-                android:textSize="20sp" />
+                android:textAlignment="textEnd"
+                android:textSize="18sp" />
         </TableRow>
 
         <TableRow
@@ -127,16 +131,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="Total Spent: "
-                android:textColor="#F44336"
-                android:textSize="24sp" />
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/spent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
+                android:layout_gravity="center_vertical|end"
                 android:text="iplsum"
-                android:textSize="20sp" />
+                android:textAlignment="textEnd"
+                android:textSize="18sp" />
 
         </TableRow>
 
@@ -148,12 +153,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="68dp"
         android:text="See previous transactions"
-        android:textColor="@color/colorPrimary"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.21"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profiledetails"
-        app:layout_constraintVertical_bias="0.085" />
+        app:layout_constraintVertical_bias="0.117" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

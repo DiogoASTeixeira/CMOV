@@ -42,7 +42,7 @@ async function getProduct(id) {
 
 //get all products on a transaction
 async function getTransactionProducts(body){
-    let query = "SELECT p.name, p.value, tp.count FROM Products p INNER JOIN TransactionProducts tp on tp.ProductId = p.id WHERE tp.TransactionId = :id";
+    let query = "SELECT p.id, p.name, p.value, tp.count FROM Products p INNER JOIN TransactionProducts tp on tp.ProductId = p.id WHERE tp.TransactionId = :id";
     return sequelize.query(query, { replacements: { id: body.TransactionId } }).catch(function(err) {
         console.log(err);
     });

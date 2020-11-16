@@ -74,7 +74,7 @@ public class Util {
                 }
 
                 if(prod_price != null) {
-                    prod_price.setText(String.valueOf(p.getCount()*p.getPrice()));
+                    prod_price.setText(String.valueOf(p.getCount()*p.getPrice()) + "€");
                 }
             }
             return line;

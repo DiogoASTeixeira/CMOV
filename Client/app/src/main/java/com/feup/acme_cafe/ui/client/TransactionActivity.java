@@ -38,7 +38,6 @@ public class TransactionActivity extends AppCompatActivity implements AdapterVie
 
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
-            //bar.setIcon(R.drawable.medium_logo2);
             bar.setDisplayShowHomeEnabled(true);
         }
 
@@ -65,6 +64,7 @@ public class TransactionActivity extends AppCompatActivity implements AdapterVie
     private void openDetails(String id) {
         Intent i = new Intent(getApplicationContext(), DetailsTransaction.class);
         i.putExtra("TransactionId", id);
+        System.out.println(id);
         startActivity(i);
     }
 
@@ -76,7 +76,6 @@ public class TransactionActivity extends AppCompatActivity implements AdapterVie
             super(context, R.layout.rowdate, objects);
             layoutResource = R.layout.rowdate;
             mContext = context;
-
         }
 
         @Override
@@ -109,11 +108,6 @@ public class TransactionActivity extends AppCompatActivity implements AdapterVie
                 if (price != null) {
                     price.setText(p.getTotal_value() + "€");
                 }
-
-                /*if (id != null) {
-                    Log.d("id", p.getId());
-                    id.setText(p.getId());
-                }*/
             }
 
             return line;

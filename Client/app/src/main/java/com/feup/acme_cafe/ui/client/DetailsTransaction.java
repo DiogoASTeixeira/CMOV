@@ -57,24 +57,23 @@ public class DetailsTransaction extends AppCompatActivity implements AdapterView
                     Log.d("details response", response.toString());
                     for (int i = 0; i < response.length(); i++) {
                         try {
-
                             JSONObject jsonobject = response.getJSONObject(i);
                             String product_id = jsonobject.getString("id");
                             String name = jsonobject.getString("name");
                             Float price = Float.parseFloat(jsonobject.getString("value"));
                             Integer count = Integer.parseInt(jsonobject.getString("count"));
-                            for (int j=0;j<count;j++)
-                            {
-                                products.add(new Product(product_id, name, price, url));
-                                transactionTotal += price;
-                            }
+                            products.add((new Product(product_id, name, price, count)));
+                            transactionTotal += (price*count);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                     TextView total= findViewById(R.id.sumproducts);
                     total.setText(transactionTotal.toString()+" €");
-                    adapter = new Util.ProductAdapter(this, R.layout.row, products);
+
+                    Log.d("products:", products.toString());
+
+                    adapter = new Util.ProductAdapter(this, R.layout.row_new, products);
                     listp.setAdapter(adapter);
                 },
                 error -> {
@@ -85,9 +84,6 @@ public class DetailsTransaction extends AppCompatActivity implements AdapterView
         ) {
         };
         queue.add(jsonobj);
-
-        Button back = findViewById(R.id.back);
-        back.setOnClickListener((v)->finish());
     }
 
     @Override

@@ -19,6 +19,13 @@ public class Product implements Serializable {
         this.imageUrl = imageUrl;
     }
 
+    public Product(String id, String name, Float price, int count){
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.count = count;
+    }
+
     public String getId() {
         return id;
     }

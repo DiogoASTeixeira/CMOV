@@ -16,16 +16,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="54dp"
+        android:layout_marginTop="120dp"
         android:layout_marginEnd="24dp"
+        android:autofillHints=""
         android:hint="@string/prompt_email"
         android:importantForAccessibility="yes"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_in_login"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/welcome_login" />
 
     <EditText
         android:id="@+id/password"
@@ -53,8 +53,10 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="32dp"
+        android:backgroundTint="@color/colorPrimary"
         android:enabled="true"
         android:text="Sign in"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password" />
@@ -82,22 +84,11 @@
         android:layout_marginTop="16dp"
         android:text="Welcome"
         android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/sign_in_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/action_sign_in"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcome_login" />
 
     <TextView
         android:id="@+id/register_text"
@@ -107,6 +98,7 @@
         android:layout_marginBottom="16dp"
         android:text="Don't have an account? Click Here to register"
         android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
