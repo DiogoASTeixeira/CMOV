@@ -25,6 +25,7 @@ import com.feup.acme_cafe.data.model.Voucher;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,14 +76,11 @@ public class NewTransactionActivity extends AppCompatActivity {
         finishButton.setOnClickListener((v) -> generateQRCode());
 
         TextView totalView = findViewById(R.id.prod_price);
-        totalView.setText(basket.getTotal_value() + " €");
-
-        totalView = findViewById(R.id.prod_price);
-        totalView.setText(basket.getTotal_value() + " €");
+        totalView.setText(new DecimalFormat("#.00").format(basket.getTotal_value()) + " €");
 
         TextView totalwithdiscountview = findViewById(R.id.totalwithdiscount);
 
-        totalwithdiscountview.setText(basket.getTotal_value() + " €");
+        totalwithdiscountview.setText(new DecimalFormat("#.00").format(basket.getTotal_value()) + " €");
 
         voucherAdapter();
     }
@@ -113,9 +111,6 @@ public class NewTransactionActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.v("QRCode Generation", e.toString());
         }
-
-        //Do we really need to save?
-        //QRGSaver.save(savePath, "qrcode", bitmap, QRGContents.ImageType.IMAGE_JPEG);
     }
 
     public HashMap<String, Object> parseTransaction() {
@@ -190,20 +185,20 @@ public class NewTransactionActivity extends AppCompatActivity {
             if(voucherView.getText().toString().contains("Normal Voucher")){
                 double discount = 0.05 * basket.getTotal_value();
                 double new_total = basket.getTotal_value() - discount;
-                total_with_discount.setText(String.valueOf(new_total));
+                total_with_discount.setText(new DecimalFormat("#.00").format(new_total));
             } else if (voucherView.getText().toString().contains("Coffee Voucher")) {
                 double coffee_price = getCoffeePrice(basket);
                 if(coffee_price > 0){
                     double new_total = basket.getTotal_value() - coffee_price;
-                    total_with_discount.setText(String.valueOf(new_total));
+                    total_with_discount.setText(new DecimalFormat("#.00").format(new_total));
                 } else {
                     setAndShowAlertDialog();
                     basket.setVoucher("No Voucher Selected");
                     voucherView.setText(basket.getVoucher());
-                    total_with_discount.setText(String.valueOf(basket.getTotal_value()));
+                    total_with_discount.setText(new DecimalFormat("#.00").format(basket.getTotal_value()));
                 }
             } else {
-                total_with_discount.setText(String.valueOf(basket.getTotal_value()));
+                total_with_discount.setText(new DecimalFormat("#.00").format(basket.getTotal_value()));
             }
 
         });

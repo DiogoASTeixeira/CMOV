@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +70,7 @@ public class DetailsTransactionActivity extends AppCompatActivity implements Ada
                         }
                     }
                     TextView total= findViewById(R.id.sumproducts);
-                    total.setText(transactionTotal.toString()+" €");
+                    total.setText(new DecimalFormat("#.00").format(transactionTotal) + " €");
 
                     Log.d("products:", products.toString());
 

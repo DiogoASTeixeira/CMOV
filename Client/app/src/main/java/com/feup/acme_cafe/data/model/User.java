@@ -88,32 +88,12 @@ public class User implements Serializable {
         return name;
     }
 
-    public int getCard_number() {
-        return card_number;
-    }
-
-    public int getCard_cvs() {
-        return card_cvs;
-    }
-
     public Float getTotal_spent() {
         return total_spent;
     }
 
-    public Float getHundred_multiples() {
-        return hundred_multiples;
-    }
-
-    public Float getTotal_coffees() {
-        return total_coffees;
-    }
-
     public List<Transaction> getTransactions() {
         return transactions;
-    }
-
-    public Transaction getTransaction(int i) {
-        return transactions.get(i);
     }
 
     public List<Voucher> getVouchers() {
@@ -158,6 +138,17 @@ public class User implements Serializable {
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
+            }
+        }
+        int number_coffee = 0;
+        int number_normal = 0;
+        for(int j = 0; j < vouchers.size(); j++){
+            if(vouchers.get(j).getName().equals("Coffee Voucher")) {
+                number_coffee++;
+                vouchers.get(j).fixName(String.valueOf(number_coffee));
+            } else if (vouchers.get(j).getName().equals("Normal Voucher")){
+                number_normal++;
+                vouchers.get(j).fixName(String.valueOf(number_normal));
             }
         }
     }

@@ -9,7 +9,7 @@ module.exports = (sequelize, type) => {
             allowNull: true
         },
         value: {
-            type: type.FLOAT,
+            type: type.DOUBLE,
             allowNull: false
         },
         icon_path: {

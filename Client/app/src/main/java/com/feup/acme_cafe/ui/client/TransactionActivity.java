@@ -21,6 +21,7 @@ import com.feup.acme_cafe.R;
 import com.feup.acme_cafe.data.model.Transaction;
 import com.feup.acme_cafe.data.model.User;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class TransactionActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -106,7 +107,7 @@ public class TransactionActivity extends AppCompatActivity implements AdapterVie
                 }
 
                 if (price != null) {
-                    price.setText(p.getTotal_value() + "€");
+                    price.setText(new DecimalFormat("#.00").format(p.getTotal_value()) + "€");
                 }
             }
 

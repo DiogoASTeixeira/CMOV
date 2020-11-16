@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.feup.acme_cafe.data.model.User;
 import com.feup.acme_cafe.R;
 
+import java.text.DecimalFormat;
+
 public class ProfileActivity extends AppCompatActivity {
 
     User user;
@@ -30,7 +32,7 @@ public class ProfileActivity extends AppCompatActivity {
         name.setText(user.getName());
 
         TextView balance= findViewById(R.id.spent);
-        balance.setText(user.getTotal_spent().toString()+" €");
+        balance.setText(new DecimalFormat("#.00").format(user.getTotal_spent())+" €");
 
         TextView email = findViewById(R.id.email_prof);
         email.setText(user.getEmail());

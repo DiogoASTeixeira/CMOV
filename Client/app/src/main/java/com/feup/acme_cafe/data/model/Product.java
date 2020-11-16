@@ -9,7 +9,7 @@ public class Product implements Serializable {
     private String imageUrl;
     private String id;
     private String name;
-    private float price;
+    private double price;
     private int count;
 
     public Product(String id, String name, Float price, String imageUrl){
@@ -42,11 +42,11 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public Float getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

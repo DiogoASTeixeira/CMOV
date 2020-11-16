@@ -134,7 +134,6 @@ public class LoginActivity extends AppCompatActivity {
                 error -> {
                     setAndShowAlertDialog("Server Error", "Unexpected Server Error");
                     Log.d("vouchers error", error.toString());
-
                 }
         ) {
         };

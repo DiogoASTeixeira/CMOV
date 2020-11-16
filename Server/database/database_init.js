@@ -46,10 +46,10 @@ sequelize
   })
     .then(() => {
       Product.bulkCreate([
-        {id: "d93402fb-8af4-40e0-8c0d-7a05485405f3", name: "Coffee", value: 20, icon_path: "../icons/coffee.png"},
-        {id: "c19817fe-2b3b-4c48-877e-7ea98f081e74", name: "Sandwich", value: 30, icon_path: "../icons/sandwich.png"},
-        {id: "a807813a-70a6-45d1-b27f-42a406ff2321", name: "Milk", value: 20, icon_path: "../icons/milk.png"},
-        {id: "6b6e76f5-85cf-4b65-9697-979524ae0c19", name: "Orange Juice", value: 50, icon_path: "../icons/orange_juice.png"},
+        {id: "d93402fb-8af4-40e0-8c0d-7a05485405f3", name: "Coffee", value: 20.00, icon_path: "../icons/coffee.png"},
+        {id: "c19817fe-2b3b-4c48-877e-7ea98f081e74", name: "Sandwich", value: 30.00, icon_path: "../icons/sandwich.png"},
+        {id: "a807813a-70a6-45d1-b27f-42a406ff2321", name: "Milk", value: 20.00, icon_path: "../icons/milk.png"},
+        {id: "6b6e76f5-85cf-4b65-9697-979524ae0c19", name: "Orange Juice", value: 50.00, icon_path: "../icons/orange_juice.png"},
       ])
     })
     .then(() => {

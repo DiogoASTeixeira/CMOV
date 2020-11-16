@@ -9,7 +9,7 @@ public class Voucher implements Serializable {
 
     private final String id;
     private final boolean coffee;
-    private final String name;
+    private String name;
     private static final AtomicInteger countC = new AtomicInteger(0);
     private static final AtomicInteger countN = new AtomicInteger(0);
 
@@ -25,10 +25,14 @@ public class Voucher implements Serializable {
         this.id = id;
         this.coffee = coffee;
         if(coffee){
-            name = "Coffee Voucher " + countC.incrementAndGet();
+            name = "Coffee Voucher" /*+ countC.incrementAndGet()*/;
         } else {
-            name = "Normal Voucher " + countN.incrementAndGet();
+            name = "Normal Voucher" /*+ countN.incrementAndGet()*/;
         }
+    }
+
+    public void fixName(String i) {
+        this.name = name + " " + i;
     }
 
     public String getId() {

@@ -39,6 +39,7 @@ import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.AlgorithmParameterSpec;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -253,15 +254,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
                 if (price != null) {
-                    price.setText(p.getPrice().toString() + "€");
+                    price.setText(new DecimalFormat("#.00").format(p.getPrice()) + "€");
                 }
 
                 if (name != null) {
                     name.setText(p.getName());
                 }
-
             }
-
             return line;
         }
 
