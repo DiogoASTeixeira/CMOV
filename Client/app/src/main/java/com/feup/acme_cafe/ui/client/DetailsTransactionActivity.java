@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DetailsTransaction extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class DetailsTransactionActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     Util.ProductAdapter adapter;
     Float transactionTotal = 0f;

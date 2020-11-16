@@ -28,7 +28,7 @@ import java.io.ObjectOutputStream;
 import java.util.List;
 
 public class Util {
-    static final String ip_address = "192.168.1.77";
+    static final String ip_address = "10.227.151.53";
 
     static class ProductAdapter extends ArrayAdapter<Product> {
         private final int layoutResource;

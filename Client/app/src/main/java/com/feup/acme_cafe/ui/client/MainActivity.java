@@ -48,7 +48,7 @@ import javax.security.auth.x500.X500Principal;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    private static final String TAG = "";
+    private static final String TAG = "Main Activity";
     ProductAdapter adapter;
     User user;
     List<Product> products;
@@ -68,8 +68,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         Button checkout = findViewById(R.id.checkout);
         checkout.setOnClickListener((v) -> checkout(user));
-
-        //genKeyPair();
     }
 
     private void checkout(User user) {
@@ -77,22 +75,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         List<Product> products = new ArrayList<>();
         float total_value = 0;
 
-        for(int i = 0; i < count; i++){
+        for (int i = 0; i < count; i++) {
             Product product = adapter.getItem(i);
-            if( product.getCount() > 0){
+            if (product.getCount() > 0) {
                 total_value += (product.getPrice() * product.getCount());
                 products.add(product);
             }
         }
 
-        Transaction trans = new Transaction();
-        trans.setProducts(products);
-        trans.setTotal_value(total_value);
+        if(products.size() == 0) {
+            setAndShowAlertDialog("Empty Cart", "Please choose a product to buy");
+        } else {
+            Transaction trans = new Transaction();
+            trans.setProducts(products);
+            trans.setTotal_value(total_value);
 
-        user.setBasket(trans);
+            user.setBasket(trans);
 
-        new_transaction_activity_intent.putExtra("user", user);
-        startActivity(new_transaction_activity_intent);
+            new_transaction_activity_intent.putExtra("user", user);
+            startActivity(new_transaction_activity_intent);
+        }
     }
 
     private void displayProducts() {
@@ -148,12 +150,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
         return(super.onOptionsItemSelected(item));
-    }
-
-    private void openDetails(String id) {
-        Intent i = new Intent(getApplicationContext(), DetailsTransaction.class);
-        i.putExtra("TransactionId", id);
-        startActivity(i);
     }
 
     public void genKeyPair() {
