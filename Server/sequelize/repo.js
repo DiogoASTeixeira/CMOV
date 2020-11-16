@@ -125,7 +125,7 @@ async function checkout(req, res) {
 
         Voucher.findOne({where: {id: req.body.voucher.id}}).then(voucher => {
             transaction.voucher = voucher;
-
+            
             if (transaction.voucher != null && !transaction.voucher.used && !transaction.voucher.coffee && transaction.voucher.UserId == req.body.UserId) {
                 transaction.total_value = total_spent - total_spent * 0.05;
                 transaction.discount = 0.05 * total_spent;
