@@ -32,8 +32,11 @@ public class ProfileActivity extends AppCompatActivity {
         name.setText(user.getName());
 
         TextView balance= findViewById(R.id.spent);
-        balance.setText(new DecimalFormat("#.00").format(user.getTotal_spent())+" €");
-
+        if(user.getTotal_spent() == 0){
+            balance.setText("0€");
+        } else {
+            balance.setText(new DecimalFormat("#.00").format(user.getTotal_spent()) + "€");
+        }
         TextView email = findViewById(R.id.email_prof);
         email.setText(user.getEmail());
 
