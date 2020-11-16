@@ -9,11 +9,11 @@
 
     <TableLayout
         android:id="@+id/profiledetails"
-        android:layout_width="318dp"
-        android:layout_height="337dp"
-        android:layout_marginTop="84dp"
+        android:layout_width="314dp"
+        android:layout_height="239dp"
+        android:layout_marginTop="132dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.425"
+        app:layout_constraintHorizontal_bias="0.762"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -160,6 +160,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profiledetails"
-        app:layout_constraintVertical_bias="0.117" />
+        app:layout_constraintVertical_bias="0.266" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
