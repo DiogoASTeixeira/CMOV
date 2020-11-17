@@ -35,7 +35,6 @@ public class DetailsTransactionActivity extends AppCompatActivity implements Ada
     ArrayList<Product> products;
     AlertDialog alertDialog;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
