@@ -63,9 +63,9 @@ public class Util {
             Product p = getItem(position);
 
             if (p != null) {
-                TextView title = line.findViewById(R.id.voucher_name);
+                TextView title = line.findViewById(R.id.prod_name);
                 TextView amount = line.findViewById(R.id.amount);
-                TextView prod_price = line.findViewById(R.id.voucher_dicount);
+                TextView prod_price = line.findViewById(R.id.prod_price);
 
                 if (title != null) {
                     title.setText(p.getName());
