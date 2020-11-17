@@ -34,41 +34,41 @@ sequelize
 .sync({force:true})
   .then(() => {
     User.bulkCreate([
-      {id: "b0e76929-9762-45b7-be1f-2f37d2edf33c", email: "fabio@gmail.com", username: "Fabio", name: "Fábio Azevedo", password:"4sPYOZOhJo3uODnnDZhuyh0hLWJ1iL57XWpj5TRESNY=", card_number:"123123", card_cvs: "101", total_spent: 0, hundred_multiples: 0, nif: "134", total_coffees: 0},
-      {id: "32bf576f-1d83-4141-9009-8d4c6435d10e", email: "diogo@gmail.com", username: "Diogo", name: "Diogo Teixeira", password:"jxRlcHQCMoGKrhyVysaZIpIlTaslft+K8iLxM227tbY=", card_number:"123124", card_cvs: "102", total_spent: 250, hundred_multiples: 2, nif: "456", total_coffees: 0},
+      {id: "b0e76", email: "fabio@gmail.com", username: "Fabio", name: "Fábio Azevedo", password:"4sPYOZOhJo3uODnnDZhuyh0hLWJ1iL57XWpj5TRESNY=", card_number:"123123", card_cvs: "101", total_spent: 0, hundred_multiples: 0, nif: "134", total_coffees: 0},
+      {id: "32bf5", email: "diogo@gmail.com", username: "Diogo", name: "Diogo Teixeira", password:"jxRlcHQCMoGKrhyVysaZIpIlTaslft+K8iLxM227tbY=", card_number:"123124", card_cvs: "102", total_spent: 182, hundred_multiples: 1, nif: "456", total_coffees: 2},
     ])
   })
   .then(() => {
     Transaction.bulkCreate([
-      {id: "82d7e51b-9b63-4570-bf32-da837ec09981", voucher: "b1a3k3v1-cte1-4ab3-b1ce-67cf4d3935ac", total_value: 220, discount: 11, UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e"},
-      {id: "82d7e51b-9b63-4570-bf32-da837ec09982", total_value: 30, discount: 0, UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e"}
+      {id: "82d7e", voucher: "735ac", total_value: 152, discount: 8, UserId:"32bf5"},
+      {id: "82d7f", total_value: 30, discount: 0, UserId:"32bf5"},
     ])
   })
     .then(() => {
       Product.bulkCreate([
-        {id: "d93402fb-8af4-40e0-8c0d-7a05485405f3", name: "Coffee", value: 20.00, icon_path: "coffee.png"},
-        {id: "c19817fe-2b3b-4c48-877e-7ea98f081e74", name: "Sandwich", value: 30.00, icon_path: "sandwich.png"},
-        {id: "a807813a-70a6-45d1-b27f-42a406ff2321", name: "Milk", value: 40.00, icon_path: "milk.png"},
-        {id: "6b6e76f5-85cf-4b65-9697-979524ae0c19", name: "Orange Juice", value: 50.00, icon_path: "orange_juice.jpg"},
+        {id: "1f45a", name: "Coffee", value: 20.00, icon_path: "coffee.png"},
+        {id: "6e89r", name: "Sandwich", value: 30.00, icon_path: "sandwich.png"},
+        {id: "1h52w", name: "Milk", value: 40.00, icon_path: "milk.png"},
+        {id: "1a25w", name: "Orange Juice", value: 50.00, icon_path: "orange_juice.jpg"},
       ])
     })
     .then(() => {
       Voucher.bulkCreate([
-        {id: "b1a3k3v1-cte0-4ab3-b1ce-67cf4d3935ac", used:false, coffee: "false", UserId:"b0e76929-9762-45b7-be1f-2f37d2edf33c", TransactionId:null},
-        {id: "b1a3k3v1-cte1-4ab3-b1ce-67cf4d3935ac", used:true, coffee: "false", UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e", TransactionId:"82d7e51b-9b63-4570-bf32-da837ec09981"},
-        {id: "b1a3k3v1-cfd2-4ab3-b1ce-67cf4d3935ac", used:false, coffee: "true", UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e", TransactionId:null},
-        {id: "b1a3k3v1-cfd3-4ab3-b1ce-67cf4d3935ac", used:false, coffee: "true", UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e", TransactionId:null},
-        {id: "b1a3k3v1-cte4-4ab3-b1ce-67cf4d3935ac", used:false, coffee: "false", UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e", TransactionId:null},
-        {id: "b1a3k3v1-cte5-4ab3-b1ce-67cf4d3935ac", used:false, coffee: "false", UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e", TransactionId:null},
+        {id: "435ac", used:false, coffee: "false", UserId:"b0e76", TransactionId:null},
+        {id: "735ac", used:true, coffee: "false", UserId:"32bf5", TransactionId:"82d7e"},
+        {id: "835ac", used:false, coffee: "true", UserId:"32bf5", TransactionId:null},
+        {id: "935ac", used:false, coffee: "true", UserId:"32bf5", TransactionId:null},
+        {id: "135ac", used:false, coffee: "false", UserId:"32bf5", TransactionId:null},
+        {id: "235ac", used:false, coffee: "false", UserId:"32bf5", TransactionId:null},
       ])
     })
       .then(() => {
         TransactionProduct.bulkCreate([
-          {ProductId: "d93402fb-8af4-40e0-8c0d-7a05485405f3", TransactionId:"82d7e51b-9b63-4570-bf32-da837ec09981", count: 1},
-          {ProductId: "6b6e76f5-85cf-4b65-9697-979524ae0c19", TransactionId:"82d7e51b-9b63-4570-bf32-da837ec09981", count: 4},
-          {ProductId: "c19817fe-2b3b-4c48-877e-7ea98f081e74", TransactionId:"82d7e51b-9b63-4570-bf32-da837ec09982", count: 1}
+          {id: "7a9af", ProductId: "6e89r", TransactionId:"82d7f", count: 1},
+          {id: "2a8ac", ProductId: "1f45a", TransactionId:"82d7e", count: 2},
+          {id: "835ac", ProductId: "6e89r", TransactionId:"82d7e", count: 4},
         ])
-        })
+      })
   .catch(error => {
     console.log("error", error);
   })

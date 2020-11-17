@@ -52,6 +52,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        Util.deletefile(getApplicationContext());
+
         Button registerButton = findViewById(R.id.register);
         usernameEditText = findViewById(R.id.username);
         passwordEditText = findViewById(R.id.password);
@@ -189,11 +191,5 @@ public class RegisterActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    String byteArrayToHex(byte[] ba) {
-        StringBuilder sb = new StringBuilder(ba.length * 2);
-        for(byte b: ba)
-            sb.append(String.format("%02x", b));
-        return sb.toString();
-    }
 
 }

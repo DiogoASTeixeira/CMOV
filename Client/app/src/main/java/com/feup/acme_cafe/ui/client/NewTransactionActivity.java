@@ -131,9 +131,8 @@ public class NewTransactionActivity extends AppCompatActivity {
         for(int i = 0; i < user.getBasket().getProducts().size(); i++){
             HashMap<String, Object> product = new HashMap<>();
             product.put("id", user.getBasket().getProducts().get(i).getId());
-            for(int j = 0; j < user.getBasket().getProducts().get(i).getCount(); j++){
-                products.add(product);
-            }
+            product.put("count", user.getBasket().getProducts().get(i).getCount());
+            products.add(product);
         }
 
         //create TransactionMap

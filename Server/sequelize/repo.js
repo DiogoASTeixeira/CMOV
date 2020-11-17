@@ -60,6 +60,8 @@ async function getUserByUsername(name) {
 
 //register new user on database
 async function registerUser(info) {
+    info.id = create_UUID();
+    
     return User.create(info).catch(function(err) {
         console.log(err);
     });
@@ -117,8 +119,9 @@ async function checkout(req, res) {
                         coffee = true;
                         coffee_price = productsDB[i].value;
                         coffee_number++;
-                    }
-                    total_spent += productsDB[i].value;
+                    };
+
+                    total_spent = total_spent + (productsDB[i].value * product.count);
                 }
             }
         });
@@ -142,14 +145,7 @@ async function checkout(req, res) {
             Transaction.create(transaction)
                 .then(createdTransaction => {
                     req.body.products.forEach(product => {
-                        let count;
-                        if (!usedProducts.has(product.id)) {
-                            count = 1;
-                        }
-                        else {
-                            count = usedProducts.get(product.id) + 1;
-                        }
-                        usedProducts.set(product.id, count);
+                        usedProducts.set(product.id, product.count);
                     });
                     usedProducts.forEach(function(count, id) {
                         let trans_prod = {
@@ -264,7 +260,7 @@ async function checkout(req, res) {
 
 function create_UUID(){
     var dt = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var uuid = 'xxyxx'.replace(/[xy]/g, function(c) {
         var r = (dt + Math.random()*16)%16 | 0;
         dt = Math.floor(dt/16);
         return (c=='x' ? r :(r&0x3|0x8)).toString(16);
