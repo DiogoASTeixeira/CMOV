@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -73,7 +72,7 @@ public class NewTransactionActivity extends AppCompatActivity {
         finishButton = findViewById(R.id.vouchers_check);
         finishButton.setOnClickListener((v) -> generateQRCode());
 
-        TextView totalView = findViewById(R.id.discount_value);
+        TextView totalView = findViewById(R.id.voucher_dicount);
         totalView.setText(new DecimalFormat("#.00").format(basket.getTotal_value()) + " €");
 
         TextView totalwithdiscountview = findViewById(R.id.totalwithdiscount);

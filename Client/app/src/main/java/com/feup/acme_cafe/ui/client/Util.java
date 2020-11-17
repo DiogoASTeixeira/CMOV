@@ -30,7 +30,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public class Util {
-    static final String ip_address = "192.168.1.77";
+    public static final String ip_address = "192.168.1.77";
 
     static class ProductAdapter extends ArrayAdapter<Product> {
         private final int layoutResource;
@@ -63,9 +63,9 @@ public class Util {
             Product p = getItem(position);
 
             if (p != null) {
-                TextView title = line.findViewById(R.id.prod_name);
+                TextView title = line.findViewById(R.id.voucher_name);
                 TextView amount = line.findViewById(R.id.amount);
-                TextView prod_price = line.findViewById(R.id.prod_price);
+                TextView prod_price = line.findViewById(R.id.voucher_dicount);
 
                 if (title != null) {
                     title.setText(p.getName());
@@ -117,7 +117,7 @@ public class Util {
 
             if (p != null) {
                 TextView name = line.findViewById(R.id.voucher_name);
-                TextView discount_value = line.findViewById(R.id.discount_value);
+                TextView discount_value = line.findViewById(R.id.voucher_dicount);
 
                 if (name != null) {
                     name.setText(p.getName());

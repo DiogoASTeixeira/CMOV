@@ -20,8 +20,5 @@ router.post('/transaction', async function(req, res, next) {
     res.json(products[0]);
 })
 
-router.post('/image', async function(req, res, next) {
-    
-})
 
 module.exports = router;

@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.security.KeyPairGeneratorSpec;
 import android.util.Log;
@@ -19,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,6 +35,8 @@ import com.feup.acme_cafe.data.model.User;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
@@ -56,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private String[] ids;
     AlertDialog alertDialog;
     private Intent new_transaction_activity_intent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,8 +249,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             Product p = getItem(position);
 
             if (p != null) {
-                TextView name = line.findViewById(R.id.voucher_name);
-                TextView price = line.findViewById(R.id.discount_value);
+                TextView name = line.findViewById(R.id.prod_name);
+                TextView price = line.findViewById(R.id.prod_price);
+                ImageView pic = line.findViewById(R.id.pic);
+
                 p.setCount(0);
                 Button increase = line.findViewById(R.id.increase);
                 View finalLine = line;
@@ -252,7 +261,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Button decrease = line.findViewById(R.id.decrease);
                 decrease.setOnClickListener((v)->decreaseQuantity(finalLine, p));
 
-
                 if (price != null) {
                     price.setText(new DecimalFormat("#.00").format(p.getPrice()) + "€");
                 }
@@ -260,8 +268,52 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 if (name != null) {
                     name.setText(p.getName());
                 }
+
+                if(pic != null){
+                    Object[] urls = new Object[2];
+                    urls[0] = p.getUrl();
+                    urls[1] = pic;
+                    new RetrieveBitmap().execute(urls);
+                }
             }
             return line;
+        }
+
+        class RetrieveBitmap extends AsyncTask<Object, ImageView, Void> {
+
+            private Exception exception;
+
+            private Bitmap bmp;
+
+            private ImageView pic;
+
+            protected Void doInBackground(Object... urls) {
+                pic = (ImageView) urls[1];
+                try {
+                    String url = "http://" + Util.ip_address + ":3000/icons/" + urls[0];
+                    URL link = null;
+                    try {
+                        link = new URL(url);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    bmp = null;
+                    try {
+                        bmp = BitmapFactory.decodeStream(link.openConnection().getInputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                    this.exception = e;
+
+                    return null;
+                }
+                return null;
+            }
+
+            protected void onPostExecute(Void feed) {
+                pic.setImageBitmap(bmp);
+            }
         }
 
         private void increaseQuantity(View line, Product p) {

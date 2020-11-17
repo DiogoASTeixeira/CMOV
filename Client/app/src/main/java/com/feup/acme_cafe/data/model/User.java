@@ -1,9 +1,16 @@
 package com.feup.acme_cafe.data.model;
 
+import android.util.Log;
+
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.feup.acme_cafe.ui.client.Util;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
