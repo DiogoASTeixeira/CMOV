@@ -1,6 +1,5 @@
 package com.feup.acme_cafe.ui.client;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +16,7 @@ import androidx.annotation.NonNull;
 import com.feup.acme_cafe.R;
 import com.feup.acme_cafe.data.model.Product;
 import com.feup.acme_cafe.data.model.User;
+import com.feup.acme_cafe.data.model.Voucher;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -77,6 +77,65 @@ public class Util {
 
                 if(prod_price != null) {
                     prod_price.setText(new DecimalFormat("#.00").format(p.getCount()*p.getPrice()) + "€");
+                }
+            }
+            return line;
+        }
+    }
+
+    static class VoucherAdapter extends ArrayAdapter<Voucher> {
+        private final int layoutResource;
+        private final Context mContext;
+        private List<Voucher> productList;
+        private User user;
+
+        VoucherAdapter(@NonNull Context context, int resource, @NonNull List<Voucher> objects, User user) {
+            super(context, resource, objects);
+            layoutResource = resource;
+            mContext = context;
+            productList = objects;
+            this.user = user;
+        }
+
+        public void updateContent(List<Voucher> newList) {
+            this.productList = newList;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            View line = convertView;
+
+            if (line == null) {
+                LayoutInflater vi;
+                vi = LayoutInflater.from(mContext);
+                line = vi.inflate(layoutResource, null);
+            }
+
+            Voucher p = getItem(position);
+
+            if (p != null) {
+                TextView name = line.findViewById(R.id.voucher_name);
+                TextView discount_value = line.findViewById(R.id.discount_value);
+
+                if (name != null) {
+                    name.setText(p.getName());
+                }
+
+                if(discount_value != null) {
+                    if(p.getName().contains("Normal Voucher")){
+                        discount_value.setText("5%");
+                    } else if (p.getName().contains("Coffee Voucher")) {
+                        List<Product> products = user.getProducts();
+                        double coffee_price = 0;
+                        for (int i = 0; i < products.size(); i++) {
+                            if(products.get(i).getName().equals("Coffee")) {
+                                coffee_price = products.get(i).getPrice();
+                            }
+                        }
+                        discount_value.setText(String.valueOf(coffee_price) + "€");
+                    }
                 }
             }
             return line;

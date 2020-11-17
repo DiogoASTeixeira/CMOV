@@ -323,11 +323,11 @@
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/prod_price"
+                app:layout_constraintRight_toLeftOf="@id/discount_value"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/prod_price"
+                android:id="@+id/discount_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
@@ -344,7 +344,7 @@
                 android:text="w/ discount: "
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/prod_price"
+                app:layout_constraintLeft_toRightOf="@id/discount_value"
                 app:layout_constraintRight_toLeftOf="@id/totalwithdiscount"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -373,7 +373,7 @@
         app:layout_constraintTop_toBottomOf="@id/totalrow">
 
         <Button
-            android:id="@+id/back"
+            android:id="@+id/previous_trans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -383,7 +383,7 @@
             android:textColor="#FFFFFF" />
 
         <Button
-            android:id="@+id/generateQRcode"
+            android:id="@+id/vouchers_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -395,14 +395,14 @@
 
     <ImageView
         android:id="@+id/QR_Image"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="315dp"
+        android:layout_height="285dp"
         app:layout_constraintBottom_toTopOf="@+id/voucherow"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productsNew"
-        app:layout_constraintVertical_bias="0.501"
+        app:layout_constraintVertical_bias="0.326"
         tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

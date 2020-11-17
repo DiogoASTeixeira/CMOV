@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.feup.acme_cafe.data.model.User;
@@ -16,6 +17,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     User user;
     Intent transaction_intent;
+    Intent voucher_intent;
     AlertDialog alertDialog;
 
     @Override
@@ -23,8 +25,12 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         user = (User) getIntent().getSerializableExtra("user");
+
         transaction_intent = new Intent( this, TransactionActivity.class);
         transaction_intent.putExtra("user", user);
+
+        voucher_intent = new Intent( this, VoucherActivity.class);
+        voucher_intent.putExtra("user", user);
 
         TextView username=  findViewById(R.id.username);
         username.setText(user.getUsername());
@@ -44,12 +50,23 @@ public class ProfileActivity extends AppCompatActivity {
         TextView vouchers=  findViewById(R.id.vouchers);
         vouchers.setText(user.getVouchers().size() + "");
 
-        TextView previous_trans = findViewById(R.id.previous_trans);
-        previous_trans.setOnClickListener((v)->previous(transaction_intent));
+        Button previous_trans = findViewById(R.id.previous_trans);
+        previous_trans.setOnClickListener((v)->previous_trans());
+
+        Button vouchers_check = findViewById(R.id.vouchers_check);
+        vouchers_check.setOnClickListener((v)->vouchers_check());
 
     }
 
-    private void previous(Intent transaction_intent) {
+    private void vouchers_check() {
+        if(user.getVouchers().size() == 0){
+            setAndShowAlertDialog("No Vouchers", "You dont have any voucher to be shown!");
+        } else {
+            startActivity(voucher_intent);
+        }
+    }
+
+    private void previous_trans() {
         if(user.getTransactions().size() == 0){
             setAndShowAlertDialog("No previous transactions", "You dont have any previous transaction to be shown!");
         } else {

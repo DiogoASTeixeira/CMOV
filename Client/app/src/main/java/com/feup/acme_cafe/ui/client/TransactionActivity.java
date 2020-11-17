@@ -93,7 +93,7 @@ public class TransactionActivity extends AppCompatActivity implements AdapterVie
             Transaction p = getItem(position);
 
             if (p != null) {
-                TextView date = line.findViewById(R.id.prod_name);
+                TextView date = line.findViewById(R.id.voucher_name);
                 TextView hora = line.findViewById(R.id.date);
                 TextView price = line.findViewById(R.id.totaltransaction);
                 String[] data = Util.parseDate(p.getDate());

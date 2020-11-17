@@ -13,7 +13,7 @@
         android:layout_height="239dp"
         android:layout_marginTop="132dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.762"
+        app:layout_constraintHorizontal_bias="0.72"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -147,19 +147,36 @@
 
     </TableLayout>
 
-    <TextView
-        android:id="@+id/previous_trans"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
-        android:text="See previous transactions"
-        android:textAlignment="center"
-        android:textColor="@color/colorAccent"
-        android:textSize="20sp"
+    <TableRow
+        android:id="@+id/buttonrow"
+        android:layout_width="291dp"
+        android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profiledetails"
-        app:layout_constraintVertical_bias="0.266" />
+        app:layout_constraintVertical_bias="0.119">
+
+        <Button
+            android:id="@+id/previous_trans"
+            android:layout_width="96dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorPrimary"
+            android:onClick="backButton"
+            android:text="Transactions"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/vouchers_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="Vouchers"
+            android:textColor="#FFFFFF" />
+
+    </TableRow>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -43,8 +43,6 @@ public class NewTransactionActivity extends AppCompatActivity {
     AlertDialog alertDialog;
     Util.ProductAdapter adapter;
     ListView productsListView;
-
-    String savePath = Environment.getExternalStorageDirectory().getPath() + "/QRCode/";
     Bitmap bitmap;
 
     @Override
@@ -72,10 +70,10 @@ public class NewTransactionActivity extends AppCompatActivity {
         adapter = new Util.ProductAdapter(this, R.layout.row_new, basket.getProducts());
         productsListView.setAdapter(adapter);
 
-        finishButton = findViewById(R.id.generateQRcode);
+        finishButton = findViewById(R.id.vouchers_check);
         finishButton.setOnClickListener((v) -> generateQRCode());
 
-        TextView totalView = findViewById(R.id.prod_price);
+        TextView totalView = findViewById(R.id.discount_value);
         totalView.setText(new DecimalFormat("#.00").format(basket.getTotal_value()) + " €");
 
         TextView totalwithdiscountview = findViewById(R.id.totalwithdiscount);

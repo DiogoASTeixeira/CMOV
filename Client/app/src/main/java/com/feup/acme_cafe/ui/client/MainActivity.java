@@ -242,8 +242,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             Product p = getItem(position);
 
             if (p != null) {
-                TextView name = line.findViewById(R.id.prod_name);
-                TextView price = line.findViewById(R.id.prod_price);
+                TextView name = line.findViewById(R.id.voucher_name);
+                TextView price = line.findViewById(R.id.discount_value);
                 p.setCount(0);
                 Button increase = line.findViewById(R.id.increase);
                 View finalLine = line;
