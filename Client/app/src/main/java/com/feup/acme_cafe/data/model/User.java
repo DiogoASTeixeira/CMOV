@@ -11,11 +11,7 @@ import java.util.List;
 public class User implements Serializable {
 
     private String id;
-    private int card_number;
-    private int card_cvs;
     private Float total_spent;
-    private Float hundred_multiples;
-    private Float total_coffees;
     private final List<Transaction> transactions;
     private final List<Voucher> vouchers;
     private String username;
@@ -41,14 +37,6 @@ public class User implements Serializable {
             this.id = response.getString("id");
             this.username = response.getString("username");
             this.name = response.getString("name");
-            this.card_number = response.getInt("card_number");
-            this.card_cvs = response.getInt("card_cvs");
-            String nif = response.getString("nif");
-            Float nif1 = Float.parseFloat(nif);
-            String total_coffees = response.getString("total_coffees");
-            this.total_coffees = Float.parseFloat(total_coffees);
-            String hundred_multiples = response.getString("hundred_multiples");
-            this.hundred_multiples = Float.parseFloat(hundred_multiples);
             String total_spent = response.getString("total_spent");
             this.total_spent = Float.parseFloat(total_spent);
             this.email = response.getString("email");
@@ -71,12 +59,46 @@ public class User implements Serializable {
                 String price = jsonobject.getString("value");
                 String url = jsonobject.getString("icon_path");
                 Product t = new Product(id, name, Float.parseFloat(price), url);
-                if(!products.contains(t)){
+                if(products.size() > 0) {
+                    boolean exists = false;
+                    for (int j = 0; j < products.size(); j++) {
+                        if (products.get(j).equals(t)) {
+                            updateProducts(t, j);
+                            exists = true;
+                        }
+                    }
+                    if(!exists){
+                        products.add(t);
+                    }
+                } else {
                     products.add(t);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void updateProducts(Product t, int j) {
+        if (t.getPrice() != products.get(j).getPrice() && t.getName().equals(products.get(j).getName()) && t.getUrl().equals(products.get(j).getUrl())) { //tudo igual exceto preço
+            products.get(j).setPrice(t.getPrice());
+        } else if (t.getPrice() == products.get(j).getPrice() && !t.getName().equals(products.get(j).getName()) && t.getUrl().equals(products.get(j).getUrl())) { //tudo igual exceto nome
+            products.get(j).setName(t.getName());
+        } else if (t.getPrice() == products.get(j).getPrice() && t.getName().equals(products.get(j).getName()) && !t.getUrl().equals(products.get(j).getUrl())) { //tudo igual exceto url
+            products.get(j).setUrl(t.getUrl());
+        } else if (t.getPrice() == products.get(j).getPrice() && !t.getName().equals(products.get(j).getName()) && !t.getUrl().equals(products.get(j).getUrl())) { //url e nome diferente
+            products.get(j).setName(t.getName());
+            products.get(j).setUrl(t.getUrl());
+        } else if (t.getPrice() != products.get(j).getPrice() && t.getName().equals(products.get(j).getName()) && !t.getUrl().equals(products.get(j).getUrl())) { //url e preço  diferente
+            products.get(j).setUrl(t.getUrl());
+            products.get(j).setPrice(t.getPrice());
+        } else if (t.getPrice() != products.get(j).getPrice() && !t.getName().equals(products.get(j).getName()) && t.getUrl().equals(products.get(j).getUrl())) { //nome e preço diferente
+            products.get(j).setName(t.getName());
+            products.get(j).setPrice(t.getPrice());
+        } else if (t.getPrice() != products.get(j).getPrice() && !t.getName().equals(products.get(j).getName()) && !t.getUrl().equals(products.get(j).getUrl())) { // nome, preço e url diferentes
+            products.get(j).setName(t.getName());
+            products.get(j).setPrice(t.getPrice());
+            products.get(j).setUrl(t.getUrl());
         }
     }
 
@@ -155,10 +177,5 @@ public class User implements Serializable {
 
     public String getEmail(){
         return this.email;
-    }
-
-    public void flushTransaction()
-    {
-        this.basket= new Transaction();
     }
 }

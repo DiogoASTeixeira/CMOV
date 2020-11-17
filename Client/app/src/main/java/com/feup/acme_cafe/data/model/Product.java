@@ -46,15 +46,14 @@ public class Product implements Serializable {
         return price;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
+    public void setPrice(Double price) {this.price = price;}
 
     @Override
     public boolean equals(@Nullable Object obj) {
         if(obj instanceof Product){
             Product aux = (Product) obj;
-            return this.id.equals(aux.id);
+            if(this.id.equals(aux.id))
+                return true;
         }
         return false;
     }

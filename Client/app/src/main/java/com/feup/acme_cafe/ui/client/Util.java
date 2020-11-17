@@ -1,5 +1,6 @@
 package com.feup.acme_cafe.ui.client;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,7 +30,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public class Util {
-    static final String ip_address = "10.227.151.53";
+    static final String ip_address = "192.168.1.77";
 
     static class ProductAdapter extends ArrayAdapter<Product> {
         private final int layoutResource;
@@ -179,6 +180,7 @@ public class Util {
 
     public static void deletefile(Context context) {
         boolean deleted;
-        deleted=context.deleteFile("user_data");
+        deleted = context.deleteFile("user_data");
     }
+
 }

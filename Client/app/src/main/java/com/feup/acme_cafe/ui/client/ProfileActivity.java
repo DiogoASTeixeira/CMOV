@@ -2,6 +2,7 @@ package com.feup.acme_cafe.ui.client;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -15,7 +16,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     User user;
     Intent transaction_intent;
-
+    AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,18 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void previous(Intent transaction_intent) {
-        startActivity(transaction_intent);
+        if(user.getTransactions().size() == 0){
+            setAndShowAlertDialog("No previous transactions", "You dont have any previous transaction to be shown!");
+        } else {
+            startActivity(transaction_intent);
+        }
+    }
+
+    private void setAndShowAlertDialog(String title, String message){
+        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        dialog.setMessage(message);
+        dialog.setTitle(title);
+        alertDialog=dialog.create();
+        alertDialog.show();
     }
 }
