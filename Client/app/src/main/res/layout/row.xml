@@ -19,7 +19,7 @@
 
     <LinearLayout
         android:layout_width="381dp"
-        android:layout_height="96dp"
+        android:layout_height="76dp"
         android:layout_weight="1"
         android:background="#00FFFFFF"
         android:backgroundTint="#00FFFFFF"
@@ -37,7 +37,7 @@
             <Button
                 android:id="@+id/increase"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="26dp"
                 android:layout_weight="1"
                 android:background="#00FFFFFF"
                 android:backgroundTint="#00FFFFFF"
@@ -49,7 +49,7 @@
             <TextView
                 android:id="@+id/amount"
                 android:layout_width="match_parent"
-                android:layout_height="29dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="0"
                 android:textAlignment="center"
@@ -59,7 +59,7 @@
             <Button
                 android:id="@+id/decrease"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="24dp"
                 android:layout_weight="1"
                 android:background="#00FFFFFF"
                 android:backgroundTint="#00FFFFFF"
