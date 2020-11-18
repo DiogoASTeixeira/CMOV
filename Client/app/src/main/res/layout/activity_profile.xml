@@ -29,8 +29,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="Username:"
-                android:textColor="@color/colorAccent"
-                android:textSize="20sp" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/username"
@@ -39,6 +40,7 @@
                 android:layout_gravity="center_vertical|end"
                 android:text="lorem"
                 android:textAlignment="textEnd"
+                android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
 
         </TableRow>
@@ -55,8 +57,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="Name: "
-                android:textColor="@color/colorAccent"
-                android:textSize="20sp" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/name"
@@ -65,6 +68,7 @@
                 android:layout_gravity="center_vertical|end"
                 android:text="iplsum"
                 android:textAlignment="textEnd"
+                android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
         </TableRow>
 
@@ -80,8 +84,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="Email"
-                android:textColor="@color/colorAccent"
-                android:textSize="20sp" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/email_prof"
@@ -91,6 +96,7 @@
                 android:layout_weight="1"
                 android:text="TextView"
                 android:textAlignment="textStart"
+                android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
         </TableRow>
 
@@ -106,8 +112,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="Nº vouchers: "
-                android:textColor="@color/colorAccent"
-                android:textSize="20sp" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/vouchers"
@@ -116,6 +123,7 @@
                 android:layout_gravity="center_vertical|end"
                 android:text="TextView"
                 android:textAlignment="textEnd"
+                android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
         </TableRow>
 
@@ -131,8 +139,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="Total Spent: "
-                android:textColor="@color/colorAccent"
-                android:textSize="20sp" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/spent"
@@ -141,6 +150,7 @@
                 android:layout_gravity="center_vertical|end"
                 android:text="iplsum"
                 android:textAlignment="textEnd"
+                android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
 
         </TableRow>
