@@ -98,7 +98,7 @@ async function getTransaction(id){
 //checkout
 async function checkout(req, res) {
     let transaction = {
-        id: create_UUID(),
+        id: create_UUID_small(),
         UserId: req.body.UserId
     };
 
@@ -149,7 +149,7 @@ async function checkout(req, res) {
                     });
                     usedProducts.forEach(function(count, id) {
                         let trans_prod = {
-                            id: create_UUID(),
+                            id: create_UUID_small(),
                             ProductId: id,
                             TransactionId: createdTransaction.id,
                             count: count
@@ -258,7 +258,7 @@ async function checkout(req, res) {
         });
 }
 
-function create_UUID(){
+function create_UUID_small(){
     var dt = new Date().getTime();
     var uuid = 'xxyxx'.replace(/[xy]/g, function(c) {
         var r = (dt + Math.random()*16)%16 | 0;
@@ -268,6 +268,16 @@ function create_UUID(){
     return uuid;
 }
 
+function create_UUID(){
+    var dt = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (dt + Math.random()*16)%16 | 0;
+        dt = Math.floor(dt/16);
+        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+  }
+
 module.exports = {
     getAllProducts,
     getProduct,
@@ -275,6 +285,7 @@ module.exports = {
     getAllUsers,
     getUserByUsername,
     create_UUID,
+    create_UUID_small,
     registerUser,
     login,
     getUnusedVouchers,

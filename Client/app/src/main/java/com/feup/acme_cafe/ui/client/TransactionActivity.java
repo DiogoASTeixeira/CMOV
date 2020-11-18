@@ -65,6 +65,13 @@ public class TransactionActivity extends AppCompatActivity implements AdapterVie
     private void openDetails(String id) {
         Intent i = new Intent(getApplicationContext(), DetailsTransactionActivity.class);
         i.putExtra("TransactionId", id);
+        double discount = 0;
+        for (int j = 0; j < user.getTransactions().size(); j++){
+            if(user.getTransactions().get(j).getId().equals(id)){
+                discount = user.getTransactions().get(j).getDiscount();
+            }
+        }
+        i.putExtra("discount", discount);
         System.out.println(id);
         startActivity(i);
     }

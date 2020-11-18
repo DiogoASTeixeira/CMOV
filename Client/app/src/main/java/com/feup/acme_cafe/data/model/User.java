@@ -145,7 +145,9 @@ public class User implements Serializable {
                 String id = jsonobject.getString("id");
                 String value = jsonobject.getString("total_value");
                 String date = jsonobject.getString("createdAt");
+                Double discount = jsonobject.getDouble("discount");
                 Transaction t = new Transaction(id, Float.parseFloat(value), date);
+                t.setDiscount(discount);
                 if(!transactions.contains(t)){
                     transactions.add(t);
                 }

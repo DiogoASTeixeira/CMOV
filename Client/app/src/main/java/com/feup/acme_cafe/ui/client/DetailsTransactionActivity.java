@@ -31,7 +31,7 @@ import java.util.Map;
 public class DetailsTransactionActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     Util.ProductAdapter adapter;
-    Float transactionTotal = 0f;
+    Double transactionTotal = 0.0;
     ArrayList<Product> products;
     AlertDialog alertDialog;
 
@@ -41,6 +41,7 @@ public class DetailsTransactionActivity extends AppCompatActivity implements Ada
         setContentView(R.layout.activity_transaction_details);
 
         String id = getIntent().getStringExtra("TransactionId");
+        Double discount = getIntent().getDoubleExtra("discount", 0);
 
         ListView listp = findViewById(R.id.productsDetails);
         products = new ArrayList<>();
@@ -63,13 +64,13 @@ public class DetailsTransactionActivity extends AppCompatActivity implements Ada
                             Float price = Float.parseFloat(jsonobject.getString("value"));
                             Integer count = Integer.parseInt(jsonobject.getString("count"));
                             products.add((new Product(product_id, name, price, count)));
-                            transactionTotal += (price*count);
+                            transactionTotal += ((price*count));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                     TextView total= findViewById(R.id.sumproducts);
-                    total.setText(new DecimalFormat("#.00").format(transactionTotal) + " €");
+                    total.setText(new DecimalFormat("#.00").format(transactionTotal-discount) + " €");
 
                     Log.d("products:", products.toString());
 

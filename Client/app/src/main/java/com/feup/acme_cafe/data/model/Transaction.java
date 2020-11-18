@@ -12,6 +12,7 @@ public class Transaction implements Serializable {
     private float total_value;
     private String date;
     private List<Product> products;
+    private double discount;
 
     @Override
     public boolean equals(@Nullable Object obj) {
@@ -35,6 +36,14 @@ public class Transaction implements Serializable {
         this.total_value = 0;
         this.products = new ArrayList<>();
         this.voucher = "";
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public double getDiscount() {
+        return this.discount;
     }
 
     public String getId() {
