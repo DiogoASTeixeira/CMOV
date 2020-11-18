@@ -16,7 +16,6 @@ router.get('/:id', async function(req, res, next) {
 
 router.post('/transaction', async function(req, res, next) {
     const products = await productRepo.getTransactionProducts(req.body[0]);
-    console.log(products[0]);
     res.json(products[0]);
 })
 

@@ -49,7 +49,7 @@ sequelize
         {id: "1f45a", name: "Coffee", value: 20.00, icon_path: "coffee.png"},
         {id: "6e89r", name: "Sandwich", value: 30.00, icon_path: "sandwich.png"},
         {id: "1h52w", name: "Milk", value: 40.00, icon_path: "milk.png"},
-        {id: "1a25w", name: "Orange Juice", value: 50.00, icon_path: "orange_juice.jpg"},
+        {id: "1a25w", name: "Orange Juice", value: 50.00, icon_path: "orange_juice.png"},
       ])
     })
     .then(() => {
