@@ -53,9 +53,14 @@ async function getAllUsers() {
     return User.findAll();
 };
 
-//get specified user by id
+//get specified user by username
 async function getUserByUsername(name) {
     return User.findOne({ where: {username: name}});
+}
+
+//get specified user by username
+async function getUserById(id) {
+    return User.findOne({ where: {id: id}});
 }
 
 //register new user on database
@@ -291,5 +296,6 @@ module.exports = {
     getUnusedVouchers,
     getTransactions,
     getTransaction,
-    checkout
+    checkout,
+    getUserById
 }

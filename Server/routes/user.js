@@ -42,4 +42,10 @@ router.get('/:username', async function(req, res, next) {
   res.json({user});
 });
 
+router.get('/id/:id', async function(req, res, next) {
+  const user = await productRepo.getUserById(req.params.id);
+  const name = user.name;
+  res.json({name});
+});
+
 module.exports = router;
