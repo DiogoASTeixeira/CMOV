@@ -26,12 +26,18 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.feup.acme_cafe.R;
 import com.feup.acme_cafe.data.model.Product;
 import com.feup.acme_cafe.data.model.Transaction;
 import com.feup.acme_cafe.data.model.User;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -49,7 +55,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.security.auth.x500.X500Principal;
 
@@ -59,10 +67,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     ProductAdapter adapter;
     User user;
     List<Product> products;
-    private String[] ids;
     AlertDialog alertDialog;
     private Intent new_transaction_activity_intent;
-
+    private String urlVoucher = "";
+    private String urlTransaction = "";
+    private String urlUpdateTotal = "";
+    private RequestQueue queue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +81,75 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         user = (User) getIntent().getSerializableExtra("user");
         new_transaction_activity_intent = new Intent(this, NewTransactionActivity.class);
         products = user.getProducts();
-        RequestQueue queue = Volley.newRequestQueue(this);
+        queue = Volley.newRequestQueue(this);
+        urlVoucher = "http://" + Util.ip_address + ":3000/user/voucher";
+        urlTransaction = "http://" + Util.ip_address + ":3000/user/transaction";
+        urlUpdateTotal = "http://" + Util.ip_address + ":3000/user/total";
+
+        getTransactions(user);
+        getVouchers(user);
+        updateTotalSpent(user);
+
         displayProducts();
 
         Button checkout = findViewById(R.id.checkout);
         checkout.setOnClickListener((v) -> checkout(user));
+    }
+
+    private void updateTotalSpent(User user) {
+        String id = user.getId();
+
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.GET, urlUpdateTotal + "/" + id, new JSONObject(),
+                response -> {
+                    Log.d("total spent response", response.toString());
+                    user.setTotalSpent(response);
+                },
+                error -> {
+                    setAndShowAlertDialog("Server Error", "Unexpected Server Error");
+                    Log.d("total spent error", error.toString());
+                }
+        ) {};
+        queue.add(jsonobj);
+    }
+
+    public void getTransactions(User user) {
+        Map<String, String> info= new HashMap<>();
+        info.put("UserId", user.getId());
+        List<JSONObject> list = new ArrayList<>();
+        list.add(new JSONObject(info));
+
+        JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.POST, urlTransaction, new JSONArray(list),
+                response -> {
+                    Log.d("transactions response", response.toString());
+                    user.setTransactions(response);
+                },
+                error -> {
+                    setAndShowAlertDialog("Server Error", "Unexpected Server Error");
+                    Log.d("transactions error", error.toString());
+                }
+        ) {};
+        queue.add(jsonobj);
+    }
+
+    private void getVouchers(User user) {
+
+        Map<String,String> info= new HashMap<>();
+        info.put("UserId", user.getId());
+        List<JSONObject> list = new ArrayList<>();
+        list.add(new JSONObject(info));
+
+        JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.POST, urlVoucher, new JSONArray(list),
+                response -> {
+                    Log.d("vouchers response", response.toString());
+                    user.setVouchers(response);
+                },
+                error -> {
+                    setAndShowAlertDialog("Server Error", "Unexpected Server Error");
+                    Log.d("vouchers error", error.toString());
+                }
+        ) {
+        };
+        queue.add(jsonobj);
     }
 
     private void checkout(User user) {

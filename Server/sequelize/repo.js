@@ -123,7 +123,7 @@ async function checkout(req, res) {
                     if(productsDB[i].name == "Coffee"){
                         coffee = true;
                         coffee_price = productsDB[i].value;
-                        coffee_number++;
+                        coffee_number += product.count;
                     };
 
                     total_spent = total_spent + (productsDB[i].value * product.count);
@@ -215,7 +215,7 @@ async function checkout(req, res) {
                                         }
 
                                         //give voucher if another 100 multiple has been reached
-                                        if((user.total_spent / 100) > (user.hundred_multiples + 1)) {
+                                        if((user.total_spent / 100) >= (user.hundred_multiples + 1)) {
                                             let voucher = {
                                                 id: create_UUID(),
                                                 used: false,

@@ -123,7 +123,7 @@ public class NewTransactionActivity extends AppCompatActivity {
         if(voucher != null) {
             voucherMap.put("id", voucher.getId());
         } else {
-            voucherMap = null;
+            voucherMap.put("id", null);
         }
 
         //create products Map

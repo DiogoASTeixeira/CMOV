@@ -28,6 +28,12 @@ router.post('/transaction', async function(req, res, next) {
   res.json(transactions);
 });
 
+router.get('/total/:id', async function(req, res, next) {
+  const user = await productRepo.getUserById(req.params.id);
+  const total_spent = user.total_spent;
+  res.json({total_spent});
+});
+
 router.post('/transaction/:id', async function(req, res, next) {
   const transaction = await productRepo.getTransaction(req.params.id);
   res.json(transaction);

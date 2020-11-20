@@ -134,7 +134,7 @@ public class Util {
                                 coffee_price = products.get(i).getPrice();
                             }
                         }
-                        discount_value.setText(String.valueOf(coffee_price) + "€");
+                        discount_value.setText(new DecimalFormat("#.00").format(coffee_price) + "€");
                     }
                 }
             }

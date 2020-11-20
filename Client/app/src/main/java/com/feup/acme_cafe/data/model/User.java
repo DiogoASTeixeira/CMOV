@@ -18,9 +18,9 @@ import java.util.List;
 public class User implements Serializable {
 
     private String id;
-    private Float total_spent;
+    private Double total_spent;
     private final List<Transaction> transactions;
-    private final List<Voucher> vouchers;
+    private List<Voucher> vouchers;
     private String username;
     private String name;
     private String email;
@@ -44,8 +44,8 @@ public class User implements Serializable {
             this.id = response.getString("id");
             this.username = response.getString("username");
             this.name = response.getString("name");
-            String total_spent = response.getString("total_spent");
-            this.total_spent = Float.parseFloat(total_spent);
+            Double total_spent = response.getDouble("total_spent");
+            this.total_spent = total_spent;
             this.email = response.getString("email");
 
         } catch (JSONException e) {
@@ -117,7 +117,7 @@ public class User implements Serializable {
         return name;
     }
 
-    public Float getTotal_spent() {
+    public Double getTotal_spent() {
         return total_spent;
     }
 
@@ -158,6 +158,7 @@ public class User implements Serializable {
     }
 
     public void setVouchers(JSONArray response) {
+        vouchers = new ArrayList<>();
         for (int i = 0; i < response.length(); i++) {
             try {
                 JSONObject jsonobject = response.getJSONObject(i);
@@ -186,5 +187,15 @@ public class User implements Serializable {
 
     public String getEmail(){
         return this.email;
+    }
+
+    public void setTotalSpent(JSONObject response) {
+        try {
+            Double total_spent = response.getDouble("total_spent");
+            this.total_spent = total_spent;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 }

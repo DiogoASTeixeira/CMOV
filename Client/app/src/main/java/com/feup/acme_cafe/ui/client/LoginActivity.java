@@ -37,8 +37,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailEditText;
     private EditText passwordEditText;
     private String urlLogin = "";
-    private String urlVoucher = "";
-    private String urlTransaction = "";
     private RequestQueue queue;
     private Intent register_intent;
     private Intent main_activity_intent;
@@ -58,13 +56,11 @@ public class LoginActivity extends AppCompatActivity {
         register_intent = new Intent( this, RegisterActivity.class);
         main_activity_intent = new Intent(this, MainActivity.class);
         urlLogin = "http://" + Util.ip_address + ":3000/user/login";
-        urlVoucher = "http://" + Util.ip_address + ":3000/user/voucher";
-        urlTransaction = "http://" + Util.ip_address + ":3000/user/transaction";
 
         try {
             User user = Util.loadUser(getApplicationContext());
             if (user != null)
-                getTransactions(user);
+                getProducts(user);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -95,48 +91,6 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("products error", error.toString());
                 }
         ) {};
-        queue.add(jsonobj);
-    }
-
-    public void getTransactions(User user) {
-        Map<String, String> info= new HashMap<>();
-        info.put("UserId", user.getId());
-        List<JSONObject> list = new ArrayList<>();
-        list.add(new JSONObject(info));
-
-        JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.POST, urlTransaction, new JSONArray(list),
-                response -> {
-                    Log.d("transactions response", response.toString());
-                    user.setTransactions(response);
-                    getVouchers(user);
-                },
-                error -> {
-                    setAndShowAlertDialog("Server Error", "Unexpected Server Error");
-                    Log.d("transactions error", error.toString());
-                }
-        ) {};
-        queue.add(jsonobj);
-    }
-
-    private void getVouchers(User user) {
-
-        Map<String,String> info= new HashMap<>();
-        info.put("UserId", user.getId());
-        List<JSONObject> list = new ArrayList<>();
-        list.add(new JSONObject(info));
-
-        JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.POST, urlVoucher, new JSONArray(list),
-                response -> {
-                    Log.d("vouchers response", response.toString());
-                    user.setVouchers(response);
-                    getProducts(user);
-                },
-                error -> {
-                    setAndShowAlertDialog("Server Error", "Unexpected Server Error");
-                    Log.d("vouchers error", error.toString());
-                }
-        ) {
-        };
         queue.add(jsonobj);
     }
 
@@ -173,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
                             } else {
                                 JSONObject jsonObj = response.getJSONObject("user");
                                 user[0] = new User(jsonObj);
-                                getTransactions(user[0]);
+                                getProducts(user[0]);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

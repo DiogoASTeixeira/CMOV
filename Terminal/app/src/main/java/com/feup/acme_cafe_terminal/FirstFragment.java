@@ -89,12 +89,16 @@ public class FirstFragment extends Fragment{
 
         try {
             JSONObject order = ((MainActivity)getActivity()).getMyData();
+
             JSONArray orderList = order.getJSONArray("products");
 
             temp = "\nVoucher: ";
 
             try {
-                order.getString("voucher");
+                String v = order.getString("voucher");
+
+                System.out.println(v);
+                
                 temp += "Yes";
             } catch (JSONException|NullPointerException e) {
                 temp += "No";
