@@ -6,6 +6,9 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="confirm_order">Confirm Order</string>
     <string name="return_to_order">Return to Order</string>
+    <string name="wait_server">Connecting to server...</string>
+    <string name="connection_success">Connected successfully.</string>
+    <string name="retry">Retry</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 

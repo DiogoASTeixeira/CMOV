@@ -9,6 +9,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.feup.acme_cafe_terminal.utils.Constants;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         queue = Volley.newRequestQueue(this);
         updateProductList();
 
-        setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -111,12 +112,20 @@ public class MainActivity extends AppCompatActivity {
 
     protected void updateProductList()
     {
+        Snackbar.make(findViewById(R.id.fab), R.string.wait_server, Snackbar.LENGTH_INDEFINITE).show();
         String urlProducts = "http://" + Constants.ip_address + ":3000/product";
         JsonArrayRequest jsonObj = new JsonArrayRequest(Request.Method.GET, urlProducts, new JSONArray(),
                 response -> {
                     productData = response;
+                    Snackbar.make(findViewById(R.id.fab), R.string.connection_success, Snackbar.LENGTH_SHORT).show();
+                    findViewById(R.id.fab).setEnabled(true);
                 },
                 error -> {
+                    Snackbar.make(findViewById(R.id.fab), error.toString() , Snackbar.LENGTH_INDEFINITE)
+                            .setAction(R.string.retry, view -> {
+                                updateProductList();
+                            })
+                            .show();
                     //error.toString();
                 }
         ) {};
