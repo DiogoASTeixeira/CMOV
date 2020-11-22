@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import com.feup.acme_cafe.data.model.Product;
@@ -34,6 +36,7 @@ public class DetailsTransactionActivity extends AppCompatActivity implements Ada
     Double transactionTotal = 0.0;
     ArrayList<Product> products;
     AlertDialog alertDialog;
+    ImageButton deleteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,27 @@ public class DetailsTransactionActivity extends AppCompatActivity implements Ada
                     setAndShowAlertDialog();
                     Log.d("transactions error", error.toString());
 
+                }
+        ) {
+        };
+        queue.add(jsonobj);
+
+        deleteButton = findViewById(R.id.deleteButton);
+        deleteButton.setOnClickListener((v) -> deleteTransaction(id));
+    }
+
+    private void deleteTransaction(String id) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        String url = "http:/"+ Util.ip_address +":3000/product/transaction/" + id; //IP Address
+
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.DELETE, url, new JSONObject(),
+                response -> {
+                    Log.d("response", response.toString());
+                },
+                error -> {
+                    setAndShowAlertDialog();
+                    Log.d("del transactions error", error.toString());
                 }
         ) {
         };

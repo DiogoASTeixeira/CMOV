@@ -278,6 +278,7 @@ async function checkout(req, res) {
         });
 }
 
+//check and save certificate
 async function saveCert(info) {
     console.log(info.cert);
 
@@ -290,13 +291,27 @@ async function saveCert(info) {
     let user_id = create_UUID();
     let certificate = {
         id: create_UUID(),
-        pem: info.cert.toString(),   //after gem certificate from database it needs to be parsed using forge.pki; pem is a string, pki transforms it into certificate
+        pem: info.cert.toString(),   //after get certificate from database it needs to be parsed using forge.pki; pem is a string, pki transforms it into certificate
         userId: user_id,
     }
-    
+
     console.log(certificate);
 
     return Certificate.create(certificate);
+}
+
+async function deleteTransaction(id) {
+    TransactionProduct.destroy({
+        where: {
+            TransactionId: id
+        }
+    });
+    Transaction.destroy({
+        where: {
+            id: id
+        }
+    });
+    return "Success"
 }
 
 function create_UUID_small(){
@@ -334,5 +349,6 @@ module.exports = {
     getTransaction,
     checkout,
     getUserById,
-    saveCert
+    saveCert,
+    deleteTransaction
 }

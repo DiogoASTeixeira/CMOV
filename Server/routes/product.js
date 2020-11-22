@@ -19,5 +19,9 @@ router.post('/transaction', async function(req, res, next) {
     res.json(products[0]);
 })
 
+router.delete('/transaction/:id', async function(req, res, next) {
+    const deleted = await productRepo.deleteTransaction(req.params.id);
+    res.json({deleted});
+})
 
 module.exports = router;

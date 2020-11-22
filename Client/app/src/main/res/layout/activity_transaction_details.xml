@@ -10,24 +10,26 @@
 
     <ListView
         android:id="@+id/productsDetails"
-        android:layout_width="396dp"
-        android:layout_height="645dp"
+        android:layout_width="410dp"
+        android:layout_height="417dp"
         android:layout_marginBottom="62dp"
         app:layout_constraintBottom_toBottomOf="@+id/pricerow"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.101">
+        app:layout_constraintVertical_bias="0.067">
 
     </ListView>
 
     <TableRow
         android:id="@+id/pricerow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="161dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="84dp"
+        android:layout_marginBottom="148dp"
         android:gravity="center_horizontal|center_vertical"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/tvresult2"
@@ -46,5 +48,19 @@
             android:textSize="24sp" />
 
     </TableRow>
+
+    <ImageButton
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginBottom="140dp"
+        android:backgroundTint="#00FFFFFF"
+        android:tint="#F43636"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.058"
+        app:layout_constraintStart_toEndOf="@+id/pricerow"
+        app:srcCompat="@android:drawable/ic_menu_delete" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
