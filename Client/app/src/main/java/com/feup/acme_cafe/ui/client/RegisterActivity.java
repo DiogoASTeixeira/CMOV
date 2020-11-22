@@ -110,7 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
         final String nif = nifEditText.getText().toString();
 
         final String[] id = new String[1];
-        id[0] = "";
+        id[0] = "Invalid Certificate";
 
         if(!hasKey) {
             try {
@@ -147,14 +147,57 @@ public class RegisterActivity extends AppCompatActivity {
 
                 final String prettified_cert = BEGIN_CERT + LINE_SEPARATOR + b64Cert + LINE_SEPARATOR + END_CERT;
 
-                HashMap<String, String> info = new HashMap<>();
-                info.put("cert", prettified_cert);
+                HashMap<String, String> data = new HashMap<>();
+                data.put("cert", prettified_cert);
 
-                JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, urlCert, new JSONObject(info),
+                JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, urlCert, new JSONObject(data),
                         response -> {
                             try {
                                 System.out.println(response);
                                 id[0] = response.get("uuid").toString();
+
+                                final String encrypt_password = PasswordUtil.generateEncryptedPassword(password);
+
+                                System.out.println(encrypt_password);
+
+                                HashMap<String, String> info = new HashMap<>();
+                                info.put("id", id[0]);
+                                info.put("email", email);
+                                info.put("username", username);
+                                info.put("name", name);
+                                info.put("password", encrypt_password);
+                                info.put("card_number", card_number);
+                                info.put("card_cvs", card_cvs);
+                                info.put("nif", nif);
+
+                                if (!email.equals("") && !username.equals("") && !name.equals("") && !password.equals("") && !card_number.equals("") && !card_cvs.equals("") && !nif.equals("")) {
+                                    JsonObjectRequest jsonobj2 = new JsonObjectRequest(Request.Method.POST, urlRegister, new JSONObject(info),
+                                            response2 -> {
+                                                try {
+                                                    Object obj = response2.get("user");
+                                                    if (obj.toString().equals("null")) {
+                                                        setAndShowAlertDialog("Register Error", "Something went wrong with the register");
+                                                        Log.d("register", "WRONG REGIST");
+                                                    } else {
+                                                        setAndShowAlertDialog("Register Success", "Please Login now");
+                                                        Log.d("register", "Successful REGIST");
+                                                        login();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            },
+                                            error -> {
+                                                setAndShowAlertDialog("Server Error", "Unexpected Server Error");
+                                                Log.d("register error", error.toString());
+                                            }
+                                    ) {
+                                    };
+
+                                    queue.add(jsonobj2);
+                                } else {
+                                    setAndShowAlertDialog("Register Error", "All the fields must be filled");
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -169,54 +212,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
         catch (Exception e) {
-
-        }
-
-        if(id != null && id[0] != null && !id[0].equals("") && !id[0].equals("Invalid Certificate")) {
-            final String encrypt_password = PasswordUtil.generateEncryptedPassword(password);
-
-            System.out.println(encrypt_password);
-
-            HashMap<String, String> info = new HashMap<>();
-            info.put("id", id[0]);
-            info.put("email", email);
-            info.put("username", username);
-            info.put("name", name);
-            info.put("password", encrypt_password);
-            info.put("card_number", card_number);
-            info.put("card_cvs", card_cvs);
-            info.put("nif", nif);
-
-            if (!email.equals("") && !username.equals("") && !name.equals("") && !password.equals("") && !card_number.equals("") && !card_cvs.equals("") && !nif.equals("")) {
-                JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, urlRegister, new JSONObject(info),
-                        response -> {
-                            try {
-                                Object obj = response.get("user");
-                                if (obj.toString().equals("null")) {
-                                    setAndShowAlertDialog("Register Error", "Something went wrong with the register");
-                                    Log.d("register", "WRONG REGIST");
-                                } else {
-                                    setAndShowAlertDialog("Register Success", "Please Login now");
-                                    Log.d("register", "Successful REGIST");
-                                    login();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        },
-                        error -> {
-                            setAndShowAlertDialog("Server Error", "Unexpected Server Error");
-                            Log.d("register error", error.toString());
-                        }
-                ) {
-                };
-
-                queue.add(jsonobj);
-            } else {
-                setAndShowAlertDialog("Register Error", "All the fields must be filled");
-            }
-        } else {
-            setAndShowAlertDialog("Certificate Error", "Something went wrong with the certificate validation");
+            e.printStackTrace();
         }
     }
 

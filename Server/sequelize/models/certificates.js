@@ -24,7 +24,15 @@ module.exports = (sequelize, type) => {
             type: type.STRING,
             allowNull: false
         },
+        thumb: {
+            type: type.STRING,
+            allowNull: false
+        },
         serial: {
+            type: type.STRING,
+            allowNull: false
+        },
+        friendly: {
             type: type.STRING,
             allowNull: false
         },
