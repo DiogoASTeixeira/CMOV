@@ -27,13 +27,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
-    public static final String EXTRA_MESSAGE = "com.feup.acme_cafe_app.USERNAME";
     private EditText emailEditText;
     private EditText passwordEditText;
     private String urlLogin = "";

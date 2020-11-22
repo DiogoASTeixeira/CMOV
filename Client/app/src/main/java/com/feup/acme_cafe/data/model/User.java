@@ -1,16 +1,9 @@
 package com.feup.acme_cafe.data.model;
 
-import android.util.Log;
-
-import com.android.volley.Request;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.feup.acme_cafe.ui.client.Util;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +12,7 @@ public class User implements Serializable {
 
     private String id;
     private Double total_spent;
-    private final List<Transaction> transactions;
+    private List<Transaction> transactions;
     private List<Voucher> vouchers;
     private String username;
     private String name;
@@ -51,6 +44,10 @@ public class User implements Serializable {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void resetTransaction() {
+        this.transactions = new ArrayList<>();
     }
 
     public List<Product> getProducts() {

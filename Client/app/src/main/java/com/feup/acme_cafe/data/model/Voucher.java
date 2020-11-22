@@ -10,8 +10,6 @@ public class Voucher implements Serializable {
     private final String id;
     private final boolean coffee;
     private String name;
-    private static final AtomicInteger countC = new AtomicInteger(0);
-    private static final AtomicInteger countN = new AtomicInteger(0);
 
     @Override
     public boolean equals(@Nullable Object obj) {
@@ -25,9 +23,9 @@ public class Voucher implements Serializable {
         this.id = id;
         this.coffee = coffee;
         if(coffee){
-            name = "Coffee Voucher" /*+ countC.incrementAndGet()*/;
+            name = "Coffee Voucher";
         } else {
-            name = "Normal Voucher" /*+ countN.incrementAndGet()*/;
+            name = "Normal Voucher";
         }
     }
 
@@ -39,16 +37,7 @@ public class Voucher implements Serializable {
         return id;
     }
 
-    public boolean isCoffee() {
-        return coffee;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public boolean isUsed() {
-        boolean used = false;
-        return used;
     }
 }

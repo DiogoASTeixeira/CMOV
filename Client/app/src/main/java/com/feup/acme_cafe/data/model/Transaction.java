@@ -67,7 +67,6 @@ public class Transaction implements Serializable {
     }
 
     public List<Product> getProducts() {
-
         return products;
     }
 

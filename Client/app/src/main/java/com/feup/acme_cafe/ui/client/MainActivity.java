@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.security.KeyPairGeneratorSpec;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,30 +39,16 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.KeyStore;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import java.security.spec.AlgorithmParameterSpec;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.security.auth.x500.X500Principal;
-
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    private static final String TAG = "Main Activity";
     ProductAdapter adapter;
     User user;
     List<Product> products;
@@ -233,66 +218,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         return(super.onOptionsItemSelected(item));
     }
 
-    public void genKeyPair() {
-        try {
-            KeyStore ks = KeyStore.getInstance(Constants.ANDROID_KEYSTORE);
-            ks.load(null);
-            KeyStore.Entry entry = ks.getEntry(Constants.keyname, null);
-            if (entry == null) {
-                Calendar start = new GregorianCalendar();
-                Calendar end = new GregorianCalendar();
-                end.add(Calendar.YEAR, 20);
-                KeyPairGenerator kgen = KeyPairGenerator.getInstance(Constants.KEY_ALGO, Constants.ANDROID_KEYSTORE);
-                AlgorithmParameterSpec spec = new KeyPairGeneratorSpec.Builder(this)
-                        .setKeySize(Constants.KEY_SIZE)
-                        .setAlias(Constants.keyname)
-                        .setSubject(new X500Principal("CN=" + Constants.keyname))
-                        .setSerialNumber(BigInteger.valueOf(12121212))
-                        .setStartDate(start.getTime())
-                        .setEndDate(end.getTime())
-                        .build();
-                kgen.initialize(spec);
-                KeyPair kp = kgen.generateKeyPair();
-            }
-        } catch (Exception e) {
-            System.err.println("Caught exception " + e.toString());
-        }
-    }
-
-    public PubKey getPubKey() {
-        PubKey pkey = new PubKey();
-        try {
-            KeyStore ks = KeyStore.getInstance(Constants.ANDROID_KEYSTORE);
-            ks.load(null);
-            KeyStore.Entry entry = ks.getEntry(Constants.keyname, null);
-            PublicKey pub = ((KeyStore.PrivateKeyEntry)entry).getCertificate().getPublicKey();
-            pkey.modulus = ((RSAPublicKey)pub).getModulus().toByteArray();
-            pkey.exponent = ((RSAPublicKey)pub).getPublicExponent().toByteArray();
-        }
-        catch (Exception ex) {
-            Log.d(TAG, ex.getMessage());
-        }
-        return pkey;
-    }
-
-    byte[] getPrivExp() {
-        byte[] exp = null;
-
-        try {
-            KeyStore ks = KeyStore.getInstance(Constants.ANDROID_KEYSTORE);
-            ks.load(null);
-            KeyStore.Entry entry = ks.getEntry(Constants.keyname, null);
-            PrivateKey priv = ((KeyStore.PrivateKeyEntry)entry).getPrivateKey();
-            exp = ((RSAPrivateKey)priv).getPrivateExponent().toByteArray();
-        }
-        catch (Exception ex) {
-            Log.d(TAG, ex.getMessage());
-        }
-        if (exp == null)
-            exp = new byte[0];
-        return exp;
-    }
-
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -405,11 +330,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             amountText.setText(Integer.toString(amount));
             p.setCount(amount);
         }
-    }
-
-    static class PubKey {
-        byte[] modulus;
-        byte[] exponent;
     }
 
     private void setAndShowAlertDialog(String title, String message){

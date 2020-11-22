@@ -1,11 +1,11 @@
 package com.feup.acme_cafe.ui.client;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,6 +20,8 @@ import com.android.volley.toolbox.Volley;
 
 import com.feup.acme_cafe.data.model.Product;
 import com.feup.acme_cafe.R;
+import com.feup.acme_cafe.data.model.User;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,12 +39,16 @@ public class DetailsTransactionActivity extends AppCompatActivity implements Ada
     ArrayList<Product> products;
     AlertDialog alertDialog;
     ImageButton deleteButton;
+    String urlTransaction = "";
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_details);
 
+        urlTransaction = "http://" + Util.ip_address + ":3000/user/transaction";
+        user = (User) getIntent().getSerializableExtra("user");
         String id = getIntent().getStringExtra("TransactionId");
         Double discount = getIntent().getDoubleExtra("discount", 0);
 
@@ -81,19 +87,18 @@ public class DetailsTransactionActivity extends AppCompatActivity implements Ada
                     listp.setAdapter(adapter);
                 },
                 error -> {
-                    setAndShowAlertDialog();
+                    setAndShowAlertDialog("Error", "Details TransactionId");
                     Log.d("transactions error", error.toString());
-
                 }
         ) {
         };
         queue.add(jsonobj);
 
         deleteButton = findViewById(R.id.deleteButton);
-        deleteButton.setOnClickListener((v) -> deleteTransaction(id));
+        deleteButton.setOnClickListener((v) -> deleteTransaction(id, user));
     }
 
-    private void deleteTransaction(String id) {
+    private void deleteTransaction(String id, User user) {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         String url = "http:/"+ Util.ip_address +":3000/product/transaction/" + id; //IP Address
@@ -101,9 +106,13 @@ public class DetailsTransactionActivity extends AppCompatActivity implements Ada
         JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.DELETE, url, new JSONObject(),
                 response -> {
                     Log.d("response", response.toString());
+                    Intent i = new Intent(this, ProfileActivity.class);
+                    i.putExtra("user", user);
+                    startActivity(i);
+                    finish();
                 },
                 error -> {
-                    setAndShowAlertDialog();
+                    setAndShowAlertDialog("Delete Transaction error", "Error deleting transaction");
                     Log.d("del transactions error", error.toString());
                 }
         ) {
@@ -116,12 +125,11 @@ public class DetailsTransactionActivity extends AppCompatActivity implements Ada
 
     }
 
-    private void setAndShowAlertDialog(){
+    private void setAndShowAlertDialog(String title, String message){
         AlertDialog.Builder dialog=new AlertDialog.Builder(this);
-        dialog.setMessage("Unexpected Server Error");
-        dialog.setTitle("Server Error");
+        dialog.setMessage(message);
+        dialog.setTitle(title);
         alertDialog=dialog.create();
         alertDialog.show();
     }
-
 }

@@ -5,13 +5,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.feup.acme_cafe.data.model.User;
 import com.feup.acme_cafe.R;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -19,12 +31,16 @@ public class ProfileActivity extends AppCompatActivity {
     Intent transaction_intent;
     Intent voucher_intent;
     AlertDialog alertDialog;
+    String urlTransaction = "";
+    RequestQueue queue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         user = (User) getIntent().getSerializableExtra("user");
+        urlTransaction = "http://" + Util.ip_address + ":3000/user/transaction";
+        queue = Volley.newRequestQueue(this);
 
         transaction_intent = new Intent( this, TransactionActivity.class);
         transaction_intent.putExtra("user", user);
@@ -50,12 +66,13 @@ public class ProfileActivity extends AppCompatActivity {
         TextView vouchers=  findViewById(R.id.vouchers);
         vouchers.setText(user.getVouchers().size() + "");
 
+        getTransactions(user);
+
         Button previous_trans = findViewById(R.id.previous_trans);
         previous_trans.setOnClickListener((v)->previous_trans());
 
         Button vouchers_check = findViewById(R.id.vouchers_check);
         vouchers_check.setOnClickListener((v)->vouchers_check());
-
     }
 
     private void vouchers_check() {
@@ -72,6 +89,26 @@ public class ProfileActivity extends AppCompatActivity {
         } else {
             startActivity(transaction_intent);
         }
+    }
+
+    public void getTransactions(User user) {
+        Map<String, String> info= new HashMap<>();
+        info.put("UserId", user.getId());
+        List<JSONObject> list = new ArrayList<>();
+        list.add(new JSONObject(info));
+
+        JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.POST, urlTransaction, new JSONArray(list),
+                response -> {
+                    Log.d("transactions response", response.toString());
+                    user.resetTransaction();
+                    user.setTransactions(response);
+                },
+                error -> {
+                    setAndShowAlertDialog("Server Error", "Unexpected Server Error");
+                    Log.d("transactions error", error.toString());
+                }
+        ) {};
+        queue.add(jsonobj);
     }
 
     private void setAndShowAlertDialog(String title, String message){
