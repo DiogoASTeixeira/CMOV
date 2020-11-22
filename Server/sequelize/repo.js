@@ -30,6 +30,8 @@ User.hasMany(Voucher);
 Voucher.belongsTo(User);
 Voucher.belongsTo(Transaction);
 
+let count = -1;
+
 //get all products
 async function getAllProducts() {
     return Product.findAll();
@@ -147,6 +149,14 @@ async function checkout(req, res) {
                 transaction.discount = 0;
             }
 
+            count++
+
+            if(count > 1000) {
+                count = 0;
+            }
+
+            transaction.orderId = count;
+
             Transaction.create(transaction)
                 .then(createdTransaction => {
                     req.body.products.forEach(product => {
@@ -249,7 +259,8 @@ async function checkout(req, res) {
                 let response = {
                     status: "success",
                     total_spent: transaction.total_value,
-                    voucher: transaction.voucher
+                    voucher: transaction.voucher,
+                    orderId: count
                 };
 
                 res.json(response);

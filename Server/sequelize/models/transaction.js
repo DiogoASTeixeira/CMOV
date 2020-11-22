@@ -11,6 +11,10 @@ module.exports = (sequelize, type) => {
         discount:{
             type: type.FLOAT,
             allowNull: false
+        },
+        orderId:{
+            type: type.INTEGER,
+            allowNull: false
         }
     })
 }

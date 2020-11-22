@@ -16,4 +16,3 @@ Exemplo de body para chamada ao endpoint /user/transaction
         }
     ]
 }
-

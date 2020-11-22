@@ -40,8 +40,8 @@ sequelize
   })
   .then(() => {
     Transaction.bulkCreate([
-      {id: "82d7e", voucher: "b1a3k3v1-cte1-4ab3-b1ce-67cf4d3935ad", total_value: 152, discount: 8, UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e"},
-      {id: "82d7f", total_value: 30, discount: 0, UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e"},
+      {id: "82d7e", voucher: "b1a3k3v1-cte1-4ab3-b1ce-67cf4d3935ad", total_value: 152, discount: 8, UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e", orderId: 0},
+      {id: "82d7f", total_value: 30, discount: 0, UserId:"32bf576f-1d83-4141-9009-8d4c6435d10e", orderId: 1},
     ])
   })
     .then(() => {
