@@ -30,7 +30,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public class Util {
-    public static final String ip_address = "192.168.1.77";
+    public static final String ip_address = "192.168.31.172";
 
     static class ProductAdapter extends ArrayAdapter<Product> {
         private final int layoutResource;

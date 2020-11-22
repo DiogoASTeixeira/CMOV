@@ -145,6 +145,7 @@ public class NewTransactionActivity extends AppCompatActivity {
     }
 
     public void backButton(View view) {
+        finish();
         Intent i = new Intent(this, MainActivity.class);
         user.setBasket(new Transaction());
         i.putExtra("user", user);
