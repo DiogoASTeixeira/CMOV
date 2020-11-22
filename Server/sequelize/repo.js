@@ -4,6 +4,8 @@ const UserModel = require('../sequelize/models/user')
 const TransactionProductModel = require('../sequelize/models/transaction_product')
 const TransactionModel = require('../sequelize/models/transaction')
 const VoucherModel = require('../sequelize/models/voucher')
+const { UUID } = require('sequelize')
+const forge = require('node-forge')
 
 const sequelize = new Sequelize('codementor', 'root', 'root', {
     host: 'localhost',
@@ -274,6 +276,16 @@ async function checkout(req, res) {
         });
 }
 
+function saveCert(info) {
+    console.log(info);
+
+    const cert = forge.pki.certificateFromPem(info.cert);
+
+    console.log(cert);
+    
+    return create_UUID();
+}
+
 function create_UUID_small(){
     var dt = new Date().getTime();
     var uuid = 'xxyxx'.replace(/[xy]/g, function(c) {
@@ -308,5 +320,6 @@ module.exports = {
     getTransactions,
     getTransaction,
     checkout,
-    getUserById
+    getUserById,
+    saveCert
 }

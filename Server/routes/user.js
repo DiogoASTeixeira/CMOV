@@ -54,4 +54,9 @@ router.get('/id/:id', async function(req, res, next) {
   res.json({name});
 });
 
+router.post('/cert', async function(req, res, next) {
+  const uuid = productRepo.saveCert(req.body);
+  res.json({uuid});
+});
+
 module.exports = router;

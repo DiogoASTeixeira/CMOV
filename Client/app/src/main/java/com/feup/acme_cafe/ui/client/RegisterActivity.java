@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.security.KeyPairGeneratorSpec;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,14 +23,29 @@ import com.feup.acme_cafe.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigInteger;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.KeyStore;
 import java.security.PublicKey;
+import java.security.cert.X509Certificate;
+import java.security.spec.AlgorithmParameterSpec;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
+
+import javax.security.auth.x500.X500Principal;
 
 public class RegisterActivity extends AppCompatActivity {
 
     public static final String EXTRA_MESSAGE = "com.feup.acme_cafe_app.USERNAME";
-    private static final String TAG = "";
+    public static final String TAG = "";
+    public static final String BEGIN_CERT = "-----BEGIN CERTIFICATE-----";
+    public static final String END_CERT = "-----END CERTIFICATE-----";
+    public final static String LINE_SEPARATOR = System.getProperty("line.separator");
+
     private EditText usernameEditText;
     private EditText passwordEditText;
     private EditText nameEditText;
@@ -37,13 +54,13 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText cardcvsEditText;
     private EditText emailEditText;
 
-    private String urlLogin = "";
+    private String urlRegister = "";
+    private String urlCert = "";
     private RequestQueue queue;
     private Intent login_intent;
     AlertDialog alertDialog;
 
     boolean hasKey;
-    TextView tvKey, tvNoKey;
     PublicKey pub;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -65,9 +82,9 @@ public class RegisterActivity extends AppCompatActivity {
         nifEditText = findViewById(R.id.nif);
         queue = Volley.newRequestQueue(this);
         login_intent = new Intent( this, LoginActivity.class);
-        urlLogin = "http://" + Util.ip_address + ":3000/user/register";
+        urlRegister = "http://" + Util.ip_address + ":3000/user/register";
+        urlCert = "http://" + Util.ip_address + ":3000/user/cert";
 
-        /*
         try {
             KeyStore ks = KeyStore.getInstance(Constants.ANDROID_KEYSTORE);
             ks.load(null);
@@ -77,7 +94,6 @@ public class RegisterActivity extends AppCompatActivity {
         catch (Exception e) {
             hasKey = false;
         }
-        tvNoKey.setText(hasKey?"Keys already generated":"No keys!");*/
 
         loginText.setOnClickListener((v)->login());
         registerButton.setOnClickListener((v)->register());
@@ -92,9 +108,10 @@ public class RegisterActivity extends AppCompatActivity {
         final String card_number = cardnumberEditText.getText().toString();
         final String card_cvs = cardcvsEditText.getText().toString();
         final String nif = nifEditText.getText().toString();
-        UUID id = UUID.randomUUID();
 
-        /*if(!hasKey) {
+        final String[] id = new String[1];
+
+        if(!hasKey) {
             try {
                 Calendar start = new GregorianCalendar();
                 Calendar end = new GregorianCalendar();
@@ -113,7 +130,6 @@ public class RegisterActivity extends AppCompatActivity {
                 pub = kp.getPublic();                                          // the corresponding public key in a Java class (PublicKey)
                 hasKey = true;
             } catch (Exception e) {
-                tvNoKey.setText(e.getMessage());
                 return;
             }
         }
@@ -127,59 +143,81 @@ public class RegisterActivity extends AppCompatActivity {
             if (entry != null) {
                 cert = (X509Certificate)((KeyStore.PrivateKeyEntry)entry).getCertificate();
                 String b64Cert = Base64.encodeToString(cert.getEncoded(), Base64.NO_WRAP);    // transform into Base64 string (PEM format without the header and footer)
-                //send to server
+
+                final String prettified_cert = BEGIN_CERT + LINE_SEPARATOR + b64Cert + LINE_SEPARATOR + END_CERT;
+
+                HashMap<String, String> info = new HashMap<>();
+                info.put("cert", prettified_cert);
+
+                JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, urlCert, new JSONObject(info),
+                        response -> {
+                            try {
+                                id[0] = response.get("uuid").toString();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        },
+                        error -> {
+                            setAndShowAlertDialog("Server Error", "Unexpected Server Error");
+                            Log.d("register error", error.toString());
+                        }
+                ) {
+                };
+                queue.add(jsonobj);
             }
         }
         catch (Exception e) {
-            tvNoKey.setText(e.getMessage());
-        }*/
 
-        final String encrypt_password = PasswordUtil.generateEncryptedPassword(password);
-
-        System.out.println(encrypt_password);
-
-        HashMap<String, String> info= new HashMap<>();
-        info.put("id", id.toString());
-        info.put("email", email);
-        info.put("username", username);
-        info.put("name", name);
-        info.put("password", encrypt_password);
-        info.put("card_number", card_number);
-        info.put("card_cvs", card_cvs);
-        info.put("nif", nif);
-
-        if(!email.equals("") && !username.equals("") && !name.equals("") && !password.equals("") && !card_number.equals("") && !card_cvs.equals("") && !nif.equals("")) {
-            JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, urlLogin, new JSONObject(info),
-                    response -> {
-                        try {
-                            Object obj = response.get("user");
-                            if (obj.toString().equals("null")) {
-                                setAndShowAlertDialog("Register Error", "Something went wrong with the register");
-                                Log.d("register", "WRONG REGIST");
-                            } else {
-                                setAndShowAlertDialog("Register Success", "Please Login now");
-                                Log.d("register", "Successful REGIST");
-                                login();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    },
-                    error -> {
-                        setAndShowAlertDialog("Server Error", "Unexpected Server Error");
-                        Log.d("register error", error.toString());
-                    }
-            ) {
-            };
-
-            queue.add(jsonobj);
         }
-        else {
-            setAndShowAlertDialog("Register Error", "All the fields must be filled");
+
+        if(id != null) {
+            final String encrypt_password = PasswordUtil.generateEncryptedPassword(password);
+
+            System.out.println(encrypt_password);
+
+            HashMap<String, String> info = new HashMap<>();
+            info.put("id", id[0]);
+            info.put("email", email);
+            info.put("username", username);
+            info.put("name", name);
+            info.put("password", encrypt_password);
+            info.put("card_number", card_number);
+            info.put("card_cvs", card_cvs);
+            info.put("nif", nif);
+
+            if (!email.equals("") && !username.equals("") && !name.equals("") && !password.equals("") && !card_number.equals("") && !card_cvs.equals("") && !nif.equals("")) {
+                JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, urlRegister, new JSONObject(info),
+                        response -> {
+                            try {
+                                Object obj = response.get("user");
+                                if (obj.toString().equals("null")) {
+                                    setAndShowAlertDialog("Register Error", "Something went wrong with the register");
+                                    Log.d("register", "WRONG REGIST");
+                                } else {
+                                    setAndShowAlertDialog("Register Success", "Please Login now");
+                                    Log.d("register", "Successful REGIST");
+                                    login();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        },
+                        error -> {
+                            setAndShowAlertDialog("Server Error", "Unexpected Server Error");
+                            Log.d("register error", error.toString());
+                        }
+                ) {
+                };
+
+                queue.add(jsonobj);
+            } else {
+                setAndShowAlertDialog("Register Error", "All the fields must be filled");
+            }
         }
     }
 
     private void login() {
+        finish();
         startActivity(login_intent);
     }
 
