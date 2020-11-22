@@ -55,8 +55,9 @@ router.get('/id/:id', async function(req, res, next) {
 });
 
 router.post('/cert', async function(req, res, next) {
-  const uuid = productRepo.saveCert(req.body);
-  res.json({uuid});
+  const certificate = await productRepo.saveCert(req.body);
+  const userId = certificate.userId;
+  res.json({userId});
 });
 
 module.exports = router;

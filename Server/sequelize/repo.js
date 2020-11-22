@@ -278,18 +278,25 @@ async function checkout(req, res) {
         });
 }
 
-function saveCert(info) {
+async function saveCert(info) {
+    console.log(info.cert);
+
     try {
         cert = forge.pki.certificateFromPem(info.cert);
     } catch (error) {
         return "Invalid Certificate"
     }
 
-    console.log(cert.subject.toString())
+    let user_id = create_UUID();
+    let certificate = {
+        id: create_UUID(),
+        pem: info.cert.toString(),   //after gem certificate from database it needs to be parsed using forge.pki; pem is a string, pki transforms it into certificate
+        userId: user_id,
+    }
     
-    //Save to db if want to do signature on terminal (Gui)
-    
-    return create_UUID();
+    console.log(certificate);
+
+    return Certificate.create(certificate);
 }
 
 function create_UUID_small(){
@@ -302,7 +309,7 @@ function create_UUID_small(){
     return uuid;
 }
 
-function create_UUID(){
+function create_UUID() {
     var dt = new Date().getTime();
     var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = (dt + Math.random()*16)%16 | 0;
@@ -310,7 +317,7 @@ function create_UUID(){
         return (c=='x' ? r :(r&0x3|0x8)).toString(16);
     });
     return uuid;
-  }
+}
 
 module.exports = {
     getAllProducts,

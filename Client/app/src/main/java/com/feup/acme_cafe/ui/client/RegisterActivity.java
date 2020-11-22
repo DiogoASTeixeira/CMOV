@@ -154,7 +154,7 @@ public class RegisterActivity extends AppCompatActivity {
                         response -> {
                             try {
                                 System.out.println(response);
-                                id[0] = response.get("uuid").toString();
+                                id[0] = response.get("userId").toString();
 
                                 final String encrypt_password = PasswordUtil.generateEncryptedPassword(password);
 
@@ -217,7 +217,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void login() {
-        finish();
         startActivity(login_intent);
     }
 
