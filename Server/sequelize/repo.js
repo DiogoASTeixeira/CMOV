@@ -80,7 +80,7 @@ async function registerUser(info) {
 
 //login
 async function login(email, password) {
-    return User.findOne({ where: {email: email, password: password}}).catch(function(err) {
+    return User.findOne({ where: {username: email, password: password}}).catch(function(err) {
         console.log(err);
     });
 }
@@ -284,6 +284,8 @@ function saveCert(info) {
     } catch (error) {
         return "Invalid Certificate"
     }
+
+    console.log(cert.subject.toString())
     
     //Save to db if want to do signature on terminal (Gui)
     

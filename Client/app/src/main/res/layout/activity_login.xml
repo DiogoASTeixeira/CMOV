@@ -44,7 +44,7 @@
         android:layout_marginTop="120dp"
         android:layout_marginEnd="24dp"
         android:autofillHints=""
-        android:hint="@string/prompt_email"
+        android:hint="Username"
         android:importantForAccessibility="yes"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
