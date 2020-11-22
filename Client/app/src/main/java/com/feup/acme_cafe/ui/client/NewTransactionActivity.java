@@ -28,6 +28,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -134,6 +135,7 @@ public class NewTransactionActivity extends AppCompatActivity {
 
         //create TransactionMap
         HashMap<String, Object> transactionMap = new HashMap<>();
+        transactionMap.put("qrId", UUID.randomUUID());
         transactionMap.put("UserId", user.getId());
         transactionMap.put("voucher", voucherMap);
         transactionMap.put("products", products);

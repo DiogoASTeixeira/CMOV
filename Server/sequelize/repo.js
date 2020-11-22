@@ -5,8 +5,10 @@ const TransactionProductModel = require('../sequelize/models/transaction_product
 const TransactionModel = require('../sequelize/models/transaction')
 const VoucherModel = require('../sequelize/models/voucher')
 const CertificatesModel = require('../sequelize/models/certificates')
+const QrlistModel = require('../sequelize/models/qrlist')
 const { UUID } = require('sequelize')
 const forge = require('node-forge')
+const qrlist = require('../sequelize/models/qrlist')
 
 const sequelize = new Sequelize('codementor', 'root', 'root', {
     host: 'localhost',
@@ -26,6 +28,7 @@ const Voucher = VoucherModel(sequelize, Sequelize);
 const Product = ProductModel(sequelize, Sequelize);
 const TransactionProduct = TransactionProductModel(sequelize, Sequelize);
 const Certificate = CertificatesModel(sequelize, Sequelize);
+const Qrlist = QrlistModel(sequelize, Sequelize);
 
 User.hasMany(Transaction);
 Transaction.belongsTo(User);
@@ -120,162 +123,179 @@ async function checkout(req, res) {
     let usedProducts = new Map();
     let coffee_number = 0;
 
-    Product.findAll().then(products => {
-        productsDB = products;
-
-        req.body.products.forEach(product => {
-            for(let i = 0; i < productsDB.length; i++){
-                if(product.id == productsDB[i].id){
-                    if(productsDB[i].name == "Coffee"){
-                        coffee = true;
-                        coffee_price = productsDB[i].value;
-                        coffee_number += product.count;
-                    };
-
-                    total_spent = total_spent + (productsDB[i].value * product.count);
-                }
-            }
-        });
-
-        Voucher.findOne({where: {id: req.body.voucher.id}}).then(voucher => {
-            transaction.voucher = voucher;
-            
-            if (transaction.voucher != null && !transaction.voucher.used && !transaction.voucher.coffee && transaction.voucher.UserId == req.body.UserId) {
-                transaction.total_value = total_spent - total_spent * 0.05;
-                transaction.discount = 0.05 * total_spent;
-            } else if (transaction.voucher != null && !transaction.voucher.used && transaction.voucher.coffee) {
-                if (coffee) {
-                    transaction.total_value = total_spent - coffee_price;
-                    transaction.discount = coffee_price;
-                }
-            } else {
-                transaction.total_value = total_spent;
-                transaction.discount = 0;
+    Qrlist.findOne({where: {id: req.body.qrId}}).then(qr => {
+        if(qr == null) {
+            let qr = {
+                id: req.body.qrId
             }
 
-            count++
+            Qrlist.create(qr);
 
-            if(count > 1000) {
-                count = 0;
-            }
+            Product.findAll().then(products => {
+                productsDB = products;
 
-            transaction.orderId = count;
+                req.body.products.forEach(product => {
+                    for(let i = 0; i < productsDB.length; i++){
+                        if(product.id == productsDB[i].id){
+                            if(productsDB[i].name == "Coffee"){
+                                coffee = true;
+                                coffee_price = productsDB[i].value;
+                                coffee_number += product.count;
+                            };
 
-            Transaction.create(transaction)
-                .then(createdTransaction => {
-                    req.body.products.forEach(product => {
-                        usedProducts.set(product.id, product.count);
-                    });
-                    usedProducts.forEach(function(count, id) {
-                        let trans_prod = {
-                            id: create_UUID_small(),
-                            ProductId: id,
-                            TransactionId: createdTransaction.id,
-                            count: count
-                        };
-                        TransactionProduct.create(trans_prod);
-                    });
-                    // Update voucher if used
-                    if (req.body.voucher != null) {
-                        Voucher.update({
-                            used: true,
-                            TransactionId: transaction.id
-                        }, {
-                            where: {
-                                id: req.body.voucher.id
-                            },
-                            returning: true, // needed for affectedRows to be populated
-                        });
+                            total_spent = total_spent + (productsDB[i].value * product.count);
+                        }
                     }
-                    User.findOne({
-                            where: {
-                                id: req.body.UserId
+                });
+
+                Voucher.findOne({where: {id: req.body.voucher.id}}).then(voucher => {
+                    transaction.voucher = voucher;
+                    
+                    if (transaction.voucher != null && !transaction.voucher.used && !transaction.voucher.coffee && transaction.voucher.UserId == req.body.UserId) {
+                        transaction.total_value = total_spent - total_spent * 0.05;
+                        transaction.discount = 0.05 * total_spent;
+                    } else if (transaction.voucher != null && !transaction.voucher.used && transaction.voucher.coffee) {
+                        if (coffee) {
+                            transaction.total_value = total_spent - coffee_price;
+                            transaction.discount = coffee_price;
+                        }
+                    } else {
+                        transaction.total_value = total_spent;
+                        transaction.discount = 0;
+                    }
+
+                    count++
+
+                    if(count > 1000) {
+                        count = 0;
+                    }
+
+                    transaction.orderId = count;
+
+                    Transaction.create(transaction)
+                        .then(createdTransaction => {
+                            req.body.products.forEach(product => {
+                                usedProducts.set(product.id, product.count);
+                            });
+                            usedProducts.forEach(function(count, id) {
+                                let trans_prod = {
+                                    id: create_UUID_small(),
+                                    ProductId: id,
+                                    TransactionId: createdTransaction.id,
+                                    count: count
+                                };
+                                TransactionProduct.create(trans_prod);
+                            });
+                            // Update voucher if used
+                            if (req.body.voucher != null) {
+                                Voucher.update({
+                                    used: true,
+                                    TransactionId: transaction.id
+                                }, {
+                                    where: {
+                                        id: req.body.voucher.id
+                                    },
+                                    returning: true, // needed for affectedRows to be populated
+                                });
                             }
-                        })
-                        .then(user => {
-                            let query = "UPDATE Users SET total_spent = total_spent + :total, total_coffees = total_coffees + :coffee_number WHERE id = :id";
-                            sequelize.query(query, {
-                                    replacements: {
-                                        total: createdTransaction.total_value,
-                                        id: user.id,
-                                        coffee_number: coffee_number
+                            User.findOne({
+                                    where: {
+                                        id: req.body.UserId
                                     }
                                 })
-                                .then(([results, metadata]) => {
-                                    let user = User.findOne({
-                                        where: {
-                                            id: req.body.UserId
-                                        }
-                                    }).then(user => {
-                                        //give voucher if more than 3 coffees
-                                        if(user.total_coffees >= 3) {
-                                            let voucher = {
-                                                id: create_UUID(),
-                                                used: false,
-                                                coffee: true,
-                                                UserId: req.body.UserId,
-                                                TransactionId: null
+                                .then(user => {
+                                    let query = "UPDATE Users SET total_spent = total_spent + :total, total_coffees = total_coffees + :coffee_number WHERE id = :id";
+                                    sequelize.query(query, {
+                                            replacements: {
+                                                total: createdTransaction.total_value,
+                                                id: user.id,
+                                                coffee_number: coffee_number
                                             }
-
-                                            Voucher.create(voucher);
-
-                                            let query = "UPDATE Users SET total_coffees = :total_coffees - 3 WHERE id = :id";
-                                            sequelize.query(query, {
-                                                replacements: {
-                                                    id: user.id,
-                                                    total_coffees: user.total_coffees
+                                        })
+                                        .then(([results, metadata]) => {
+                                            let user = User.findOne({
+                                                where: {
+                                                    id: req.body.UserId
                                                 }
-                                            })
-                                        }
+                                            }).then(user => {
+                                                //give voucher if more than 3 coffees
+                                                if(user.total_coffees >= 3) {
+                                                    let voucher = {
+                                                        id: create_UUID(),
+                                                        used: false,
+                                                        coffee: true,
+                                                        UserId: req.body.UserId,
+                                                        TransactionId: null
+                                                    }
 
-                                        //give voucher if another 100 multiple has been reached
-                                        if((user.total_spent / 100) >= (user.hundred_multiples + 1)) {
-                                            let voucher = {
-                                                id: create_UUID(),
-                                                used: false,
-                                                coffee: false,
-                                                UserId: req.body.UserId,
-                                                TransactionId: null
-                                            }
+                                                    Voucher.create(voucher);
 
-                                            Voucher.create(voucher);
-
-                                            let query = "UPDATE Users SET hundred_multiples = hundred_multiples + 1 WHERE id = :id";
-                                            sequelize.query(query, {
-                                                replacements: {
-                                                    id: user.id,
+                                                    let query = "UPDATE Users SET total_coffees = :total_coffees - 3 WHERE id = :id";
+                                                    sequelize.query(query, {
+                                                        replacements: {
+                                                            id: user.id,
+                                                            total_coffees: user.total_coffees
+                                                        }
+                                                    })
                                                 }
-                                            })
-                                        }
-                                    }).catch(function(err) {
-                                        console.log(err);
-                                    });
+
+                                                //give voucher if another 100 multiple has been reached
+                                                if((user.total_spent / 100) >= (user.hundred_multiples + 1)) {
+                                                    let voucher = {
+                                                        id: create_UUID(),
+                                                        used: false,
+                                                        coffee: false,
+                                                        UserId: req.body.UserId,
+                                                        TransactionId: null
+                                                    }
+
+                                                    Voucher.create(voucher);
+
+                                                    let query = "UPDATE Users SET hundred_multiples = hundred_multiples + 1 WHERE id = :id";
+                                                    sequelize.query(query, {
+                                                        replacements: {
+                                                            id: user.id,
+                                                        }
+                                                    })
+                                                }
+                                            }).catch(function(err) {
+                                                console.log(err);
+                                            });
+                                        }).catch(function(err) {
+                                            console.log(err);
+                                        });
                                 }).catch(function(err) {
                                     console.log(err);
                                 });
                         }).catch(function(err) {
                             console.log(err);
                         });
+
+                        let response = {
+                            status: "Success",
+                            total_spent: transaction.total_value,
+                            voucher: transaction.voucher,
+                            orderId: count
+                        };
+
+                        res.json(response);
+
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
                 }).catch(function(err) {
                     console.log(err);
                 });
+        } else {
+            let response = {
+                status: "Error! Qr already used",
+            };
 
-                let response = {
-                    status: "success",
-                    total_spent: transaction.total_value,
-                    voucher: transaction.voucher,
-                    orderId: count
-                };
-
-                res.json(response);
-
-            }).catch(function(err) {
-                console.log(err);
-            });
-        })
-        .catch(function(err) {
-            console.log(err);
-        });
+            res.json(response);
+        }
+    }).catch(function (err) {
+        console.log(err);
+    })      
 }
 
 //check and save certificate

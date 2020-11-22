@@ -5,6 +5,7 @@ const TransactionProductModel = require('../sequelize/models/transaction_product
 const TransactionModel = require('../sequelize/models/transaction')
 const VoucherModel = require('../sequelize/models/voucher')
 const CertificatesModel = require('../sequelize/models/certificates')
+const QrlistModel = require('../sequelize/models/qrlist')
 
 const sequelize = new Sequelize('codementor', 'root', 'root', {
     host: 'localhost',
@@ -24,6 +25,7 @@ const Voucher = VoucherModel(sequelize, Sequelize);
 const Product = ProductModel(sequelize, Sequelize);
 const TransactionProduct = TransactionProductModel(sequelize, Sequelize);
 const Certificate = CertificatesModel(sequelize, Sequelize);
+const Qrlist = QrlistModel(sequelize, Sequelize);
 
 User.hasMany(Transaction);
 Transaction.belongsTo(User);

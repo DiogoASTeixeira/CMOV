@@ -1,6 +1,7 @@
 Exemplo de body para chamada ao endpoint /user/transaction
 
 {
+    "qrId": "dff8c0c6-1ed3-42e5-bd26-e9e44f96337b"
     "UserId": "32bf576f-1d83-4141-9009-8d4c6435d10e",
     "voucher": {
         "id": "b1a3k3v1-cte1-4ab3-b1ce-67cf4d3935ag"
