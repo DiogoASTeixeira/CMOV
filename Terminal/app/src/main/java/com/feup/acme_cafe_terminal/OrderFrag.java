@@ -1,8 +1,6 @@
 package com.feup.acme_cafe_terminal;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +9,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -21,18 +18,13 @@ import org.json.JSONObject;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonArrayRequest;
-
-import java.io.IOException;
-import java.text.NumberFormat;
 
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.feup.acme_cafe_terminal.utils.*;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-public class FirstFragment extends Fragment{
+public class OrderFrag extends Fragment{
 
 
     private RequestQueue queue;
@@ -75,10 +67,10 @@ public class FirstFragment extends Fragment{
                         },
                         error -> {
                             ((MainActivity)getActivity()).setOrderId(-1);
+                            goToNextFrag();
                             spinner.setVisibility(View.GONE);
                             text.setVisibility(View.VISIBLE);
                             button.setEnabled(true);
-                            goToNextFrag();
                             Snackbar.make(view, error.toString() , Snackbar.LENGTH_SHORT).show();
                         }
                 ) {};
@@ -89,7 +81,7 @@ public class FirstFragment extends Fragment{
 
     public void goToNextFrag()
     {
-        NavHostFragment.findNavController(FirstFragment.this)
+        NavHostFragment.findNavController(OrderFrag.this)
                 .navigate(R.id.action_FirstFragment_to_SecondFragment);
     }
 

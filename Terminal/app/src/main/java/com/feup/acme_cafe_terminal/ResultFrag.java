@@ -1,7 +1,6 @@
 package com.feup.acme_cafe_terminal;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 
-public class SecondFragment extends Fragment{
+public class ResultFrag extends Fragment{
 
     View curView;
     TextView order_id;
@@ -38,7 +37,7 @@ public class SecondFragment extends Fragment{
         view.findViewById(R.id.button_second).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(SecondFragment.this)
+                NavHostFragment.findNavController(ResultFrag.this)
                         .navigate(R.id.action_SecondFragment_to_FirstFragment);
             }
         });
@@ -65,7 +64,7 @@ public class SecondFragment extends Fragment{
 
 
         if (((MainActivity) getActivity()).hasReadCodeOnce())
-            NavHostFragment.findNavController(SecondFragment.this)
+            NavHostFragment.findNavController(ResultFrag.this)
                     .navigate(R.id.action_SecondFragment_to_FirstFragment);
     }
 }
