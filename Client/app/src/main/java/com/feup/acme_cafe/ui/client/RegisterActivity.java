@@ -110,6 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
         final String nif = nifEditText.getText().toString();
 
         final String[] id = new String[1];
+        id[0] = "";
 
         if(!hasKey) {
             try {
@@ -152,6 +153,7 @@ public class RegisterActivity extends AppCompatActivity {
                 JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, urlCert, new JSONObject(info),
                         response -> {
                             try {
+                                System.out.println(response);
                                 id[0] = response.get("uuid").toString();
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -170,7 +172,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         }
 
-        if(id != null) {
+        if(id != null && id[0] != null && !id[0].equals("") && !id[0].equals("Invalid Certificate")) {
             final String encrypt_password = PasswordUtil.generateEncryptedPassword(password);
 
             System.out.println(encrypt_password);
@@ -213,6 +215,8 @@ public class RegisterActivity extends AppCompatActivity {
             } else {
                 setAndShowAlertDialog("Register Error", "All the fields must be filled");
             }
+        } else {
+            setAndShowAlertDialog("Certificate Error", "Something went wrong with the certificate validation");
         }
     }
 

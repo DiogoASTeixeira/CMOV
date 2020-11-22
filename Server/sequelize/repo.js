@@ -4,6 +4,7 @@ const UserModel = require('../sequelize/models/user')
 const TransactionProductModel = require('../sequelize/models/transaction_product')
 const TransactionModel = require('../sequelize/models/transaction')
 const VoucherModel = require('../sequelize/models/voucher')
+const CertificatesModel = require('../sequelize/models/certificates')
 const { UUID } = require('sequelize')
 const forge = require('node-forge')
 
@@ -24,6 +25,7 @@ const Transaction = TransactionModel(sequelize, Sequelize)
 const Voucher = VoucherModel(sequelize, Sequelize);
 const Product = ProductModel(sequelize, Sequelize);
 const TransactionProduct = TransactionProductModel(sequelize, Sequelize);
+const Certificate = CertificatesModel(sequelize, Sequelize);
 
 User.hasMany(Transaction);
 Transaction.belongsTo(User);
@@ -277,11 +279,13 @@ async function checkout(req, res) {
 }
 
 function saveCert(info) {
-    console.log(info);
-
-    const cert = forge.pki.certificateFromPem(info.cert);
-
-    console.log(cert);
+    try {
+        cert = forge.pki.certificateFromPem(info.cert);
+    } catch (error) {
+        return "Invalid Certificate"
+    }
+    
+    //Save to db if want to do signature on terminal (Gui)
     
     return create_UUID();
 }
