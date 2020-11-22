@@ -26,11 +26,9 @@ import java.util.List;
 
 public class TransactionActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    private static final String TAG = "";
     TransactionActivity.TransactionAdapter adapter;
     User user;
     private String[] ids;
-
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +61,10 @@ public class TransactionActivity extends AppCompatActivity implements AdapterVie
     }
 
     private void openDetails(String id) {
+        finish();
         Intent i = new Intent(getApplicationContext(), DetailsTransactionActivity.class);
         i.putExtra("TransactionId", id);
+        i.putExtra("user", user);
         double discount = 0;
         for (int j = 0; j < user.getTransactions().size(); j++){
             if(user.getTransactions().get(j).getId().equals(id)){
@@ -121,4 +121,5 @@ public class TransactionActivity extends AppCompatActivity implements AdapterVie
             return line;
         }
     }
+
 }

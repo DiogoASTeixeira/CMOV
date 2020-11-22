@@ -33,9 +33,6 @@ import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
 public class NewTransactionActivity extends AppCompatActivity {
-    static final String ACTION_SCAN = "com.google.zxing.client.android.SCAN";
-    final static int DIMENSION = 500;
-    final static String CH_SET = "ISO-8859-1";
     private Transaction basket;
     Button finishButton;
     User user;

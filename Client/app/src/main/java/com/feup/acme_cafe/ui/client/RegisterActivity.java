@@ -10,19 +10,15 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.feup.acme_cafe.R;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -30,18 +26,13 @@ import java.security.KeyStore;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.security.spec.AlgorithmParameterSpec;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicReference;
-
 import javax.security.auth.x500.X500Principal;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    public static final String EXTRA_MESSAGE = "com.feup.acme_cafe_app.USERNAME";
-    public static final String TAG = "";
     public static final String BEGIN_CERT = "-----BEGIN CERTIFICATE-----";
     public static final String END_CERT = "-----END CERTIFICATE-----";
     public final static String LINE_SEPARATOR = System.getProperty("line.separator");
@@ -227,6 +218,4 @@ public class RegisterActivity extends AppCompatActivity {
         alertDialog=dialog.create();
         alertDialog.show();
     }
-
-
 }
