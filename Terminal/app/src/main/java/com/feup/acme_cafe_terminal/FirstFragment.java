@@ -68,14 +68,17 @@ public class FirstFragment extends Fragment{
                 JsonObjectRequest jsonObj = new JsonObjectRequest(Request.Method.POST, urlProducts,
                         ((MainActivity)getActivity()).getMyData(),
                         response -> {
+                            ((MainActivity)getActivity()).setOrderId(response.optInt("orderId",420));
                             goToNextFrag();
                             spinner.setVisibility(View.GONE);
                             text.setVisibility(View.VISIBLE);
                         },
                         error -> {
+                            ((MainActivity)getActivity()).setOrderId(-1);
                             spinner.setVisibility(View.GONE);
                             text.setVisibility(View.VISIBLE);
                             button.setEnabled(true);
+                            goToNextFrag();
                             Snackbar.make(view, error.toString() , Snackbar.LENGTH_SHORT).show();
                         }
                 ) {};

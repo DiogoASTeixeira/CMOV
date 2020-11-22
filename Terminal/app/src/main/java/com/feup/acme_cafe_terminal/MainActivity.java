@@ -30,6 +30,7 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity {
 
     JSONObject data = null;
+    int orderId = -1;
     JSONArray productData = null;
     private RequestQueue queue;
     boolean hasReadCodeOnce = false;
@@ -88,6 +89,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void resetReadState() {
         hasReadCodeOnce = false;
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
     @Override
