@@ -1,6 +1,7 @@
 package com.feup.acme_cafe_terminal;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import org.json.JSONObject;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.feup.acme_cafe_terminal.utils.*;
@@ -56,8 +58,8 @@ public class OrderFrag extends Fragment{
                 spinner.setVisibility(View.VISIBLE);
                 text.setVisibility(View.GONE);
                 button.setEnabled(false);
-                String urlProducts = "http://" + Constants.ip_address + ":3000/user/checkout";
-                JsonObjectRequest jsonObj = new JsonObjectRequest(Request.Method.POST, urlProducts,
+                String urlCheckout = "http://" + Constants.ip_address + ":3000/user/checkout";
+                JsonObjectRequest jsonObj = new JsonObjectRequest(Request.Method.POST, urlCheckout,
                         ((MainActivity)getActivity()).getMyData(),
                         response -> {
                             ((MainActivity)getActivity()).setOrderId(response.optInt("orderId",420));
@@ -85,6 +87,12 @@ public class OrderFrag extends Fragment{
                 .navigate(R.id.action_FirstFragment_to_SecondFragment);
     }
 
+    private boolean voucherIsCoffee = false;
+    private boolean hasVoucher = false;
+    private boolean orderHasCoffee = false;
+    private float cost = 0;
+    private float coffeeCost = 0;
+
     @Override
     public void onResume() {
         super.onResume();
@@ -106,18 +114,47 @@ public class OrderFrag extends Fragment{
 
             temp = "\nVoucher: ";
 
+            voucherIsCoffee = false;
+            hasVoucher = false;
+            orderHasCoffee = false;
+
             try {
                 if (order.getJSONObject("voucher").isNull("id"))
                     temp += "No";
-                else
+                else {
+                    String urlVouchers = "http://" + Constants.ip_address + ":3000/user/voucher";
+                    JsonArrayRequest jsonObj = new JsonArrayRequest(Request.Method.POST, urlVouchers,
+                            new JSONArray().put(new JSONObject().put("UserId", order.getString("UserId"))),
+                            response -> {
+                                for (int i = 0; i < response.length(); i++) {
+                                    try {
+                                        JSONObject jsonobject = response.getJSONObject(i);
+                                        String id = jsonobject.getString("id");
+                                        if(order.getString("voucher").equals(id)) {
+                                            voucherIsCoffee = jsonobject.getBoolean("coffee");
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            },
+                            error -> {
+
+                            }
+                    ) {
+                    };
+                    queue.add(jsonObj);
                     temp += "Yes";
+                    hasVoucher = true;
+                }
             } catch (JSONException|NullPointerException e) {
+                e.printStackTrace();
                 temp += "Invalid/Error";
             }
 
             temp += "\n\nOrder:";
 
-            float cost = 0;
+            cost = 0;
 
             for (int j = 0; j < orderList.length(); j++) {
                 JSONObject ordProd = orderList.getJSONObject(j);
@@ -126,6 +163,11 @@ public class OrderFrag extends Fragment{
                         JSONObject prod = productArray.getJSONObject(i);
                         if (prod.getString("id").equals(ordProd.getString("id"))) {
                             temp += "\n- " + prod.getString("name") + " x " + ordProd.getInt("count");
+                            if (prod.getString("name").equals("coffee")) {
+                                coffeeCost = 0;
+                                coffeeCost += 1 * prod.getDouble("value");
+                                orderHasCoffee = true;
+                            }
                             cost += prod.getDouble("value") * ordProd.getInt("count");
                         }
                     } catch (JSONException e) {
@@ -135,14 +177,23 @@ public class OrderFrag extends Fragment{
                 }
             }
 
-            temp += "\n\n\n\nTotal: " + String.format("%.02f €",cost);
+            temp += "\n\n\n\nTotal: ";
 
-            String urlProducts = "http://" + Constants.ip_address + ":3000/user/id/" + order.getString("UserId");
+            String urlUser = "http://" + Constants.ip_address + ":3000/user/id/" + order.getString("UserId");
             String finalTemp = temp;
-            JsonObjectRequest jsonObj = new JsonObjectRequest(Request.Method.GET, urlProducts, new JSONObject(),
+            JsonObjectRequest jsonObj = new JsonObjectRequest(Request.Method.GET, urlUser, new JSONObject(),
                     response -> {
                         try {
-                            text.setText("User:\n- " + response.getString("name") + "\n" + finalTemp);
+                            float tempCost = cost;
+                            if(hasVoucher)
+                                if(voucherIsCoffee) {
+                                    if (orderHasCoffee)
+                                        tempCost -= coffeeCost;
+                                }else
+                                {
+                                    tempCost *= 0.95;
+                                }
+                            text.setText("User:\n- " + response.getString("name") + "\n" + finalTemp + String.format("%.02f €",tempCost));
                             spinner.setVisibility(View.GONE);
                             text.setVisibility(View.VISIBLE);
                             button.setEnabled(true);
