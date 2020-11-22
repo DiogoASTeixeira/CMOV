@@ -217,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         else if (item.getItemId() == R.id.logout) {
 
+            finish();
             Intent i = new Intent(this, LoginActivity.class);
             try {
                 User user = Util.loadUser(getApplicationContext());

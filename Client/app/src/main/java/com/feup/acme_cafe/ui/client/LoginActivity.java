@@ -95,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void openStore(User user) {
+        finish();
         main_activity_intent.putExtra("user", user);
         startActivity(main_activity_intent);
     }
